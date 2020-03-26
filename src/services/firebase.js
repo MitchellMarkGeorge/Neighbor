@@ -1,9 +1,12 @@
 
+// RECOMENDED IMPORT METHOD LOADS IN FOLDER
 // what is the best way to import firebase???
 import * as firebase from "firebase/app";
+
+// import firebase from 'firebase'
 import "firebase/analytics";
 import "firebase/auth"; // do i need this
-import "firebase/firebase-database"
+import "firebase/database"
  const firebaseConfig = {
     apiKey: "AIzaSyBZt5udwhi0_yA8QTIY26ce495Ys5GCVOA",
     authDomain: "neighbor-app-mmg.firebaseapp.com",

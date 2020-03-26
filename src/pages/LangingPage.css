@@ -1,0 +1,41 @@
+.landing-container {
+    background-color: #0BB5FF;
+    height: 100%; 
+    /* margin: auto; */
+    display: flex;
+  justify-content: center;
+  align-items: center;
+    
+    /* color:#fff; */
+}
+
+.inner-container {
+    margin: 1rem;
+    color: #fff;
+}
+
+.landing-container .inner-container h1 {
+    /* margin: auto; */
+    text-align: center;
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.landing-container .inner-container p {
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.landing-container .inner-container div {
+    text-align: center;
+}
+
+.inner-container div button {
+    border-radius: 1rem;
+    margin-right: 0.5rem;
+}
+
+/* .landing-button {
+    background: ;
+} */

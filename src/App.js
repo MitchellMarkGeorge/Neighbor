@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Spin } from 'antd';
 import './App.css';
 import { Home } from './pages/Home';
 import { SignUp } from './pages/SignUp';
@@ -12,7 +12,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import { auth } from './firebase'
+import { auth } from './services/firebase'
 
 // object destructoring
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
@@ -49,8 +49,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged( (user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
+        console.log(user)
         this.setState({
           authenticated: true,
           loading: false,
@@ -64,16 +65,21 @@ class App extends React.Component {
     })
   }
   render() {
-    return (
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Landing}/>
-          <PrivateRoute path="/home" authenticated={this.state.authenticated} component={Home}/>
-          <PublicRoute path="/signup" authenticated={this.state.authenticated} component={SignUp}/>
-          <PublicRoute path="/login" authenticated={this.state.authenticated} component={LogIn}/>
-        </Switch>
-      </Router>
-    )
+    // senteralize spin in the middle of the page 
+    return this.state.loading === true ? <div className="loading-container">
+      <Spin size="large" />
+      <h2 className="loading-title">Loading Neighbor...</h2>
+    </div> : (
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <PrivateRoute path="/home" authenticated={this.state.authenticated} component={Home} />
+            <PublicRoute path="/signup" authenticated={this.state.authenticated} component={SignUp} />
+            <PublicRoute path="/login" authenticated={this.state.authenticated} component={LogIn} />
+          </Switch>
+        </Router>
+      )
+
   }
 }
 
