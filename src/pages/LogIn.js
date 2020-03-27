@@ -7,16 +7,20 @@ import { logIn } from '../services/auth';
 
 import { message } from 'antd';
 export class LogIn extends Component {
-    
+    state = {
+        loading: false
+    }
 
     onFinish = async (values) => {
         console.log(values);
+        this.setState({loading: true})
         const {email, password} = values;
         try {
             let response = await logIn(email, password);
             console.log(response);
         } catch(e) {
             console.log(e);
+            this.setState({loading: false})
             message.error(e.message)
         }
     }
@@ -65,7 +69,7 @@ export class LogIn extends Component {
                     </Form.Item> */}
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
+                        <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>
                             Log in
         </Button>
        

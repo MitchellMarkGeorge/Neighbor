@@ -1,0 +1,114 @@
+.layout {
+    height: 100%;
+    width: 100%;
+}
+
+.layout header {
+    background-color: var(--primary-blue);
+    /* think about usign #1890ff */
+    /* color: #fff !important; */
+    z-index: 2;
+    padding: 0;
+    position: 'fixed';
+     width: '100%';
+}
+
+.header-container {
+    margin: auto;
+    overflow: hidden;
+    /* color: #fff; */
+    padding-left: 2rem;
+
+    padding-right: 2rem;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.header-container h1 {
+    margin: 0;
+    color: #fff;
+    /* figure out font-size; */
+}
+
+.header-items {
+    list-style: none;
+    margin: 0;
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-items li {
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    /* padding-left: 1rem; */
+    padding-right: 0.5rem;
+}
+
+.main-content {
+    background-color: #fff;
+    margin: 1rem; 
+    overflow: initial;
+}
+
+.sider {
+    /* light or dark theme */
+        overflow: auto;
+        height: 100%; 
+        /* color: rgba(255, 255, 255, 0.65); */
+        /* text-align: center; */
+    
+    
+    
+    
+    
+    ;
+        /* position: fixed; */
+        /* left: 0; */
+     
+}
+
+.sider .user-detials {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+  }
+
+  .ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+      background-color: var(--primary-blue);
+  }
+
+  .sider button {
+      margin: 1rem 0;
+      text-align: center;
+      /* margin: 0 auto; */
+      background-color: var(--primary-blue);
+      /* border-radius: 1rem; */
+
+  }
+
+@media (max-width: 700px) {
+    /* think about this */
+    /* .header-container {
+        display: block;
+        margin: 0;
+
+    }
+
+    .header-container h1 {
+        text-align: center;
+        margin: 0;
+    }
+
+    .header-items {
+        display: none;
+    } */
+}

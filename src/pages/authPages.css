@@ -11,16 +11,16 @@
 }
 
 .login-form-button {
-    background-color: #0BB5FF !important;
+    background-color: var(--primary-blue) !important;
     width: 100%;
 }
 
 a {
-    color: #0BB5FF !important;
+    color: var(--primary-blue) !important;
 }
 
 
 
 .neighbor-text {
-    color: #0BB5FF;
+    color: var(--primary-blue);
 }

@@ -7,9 +7,14 @@ import { message } from 'antd';
 import { signUp } from '../services/auth';
 
 export class SignUp extends Component {
+    state = {
+        loading: false
+    }
 
     onFinish = async (values) => {
+        this.setState({loading: true})
         console.log(values);
+        
         const { email, password, name } = values;
         try {
             const response = await signUp(email, password);
@@ -22,15 +27,21 @@ export class SignUp extends Component {
                     // LOADED AND DISPLAYNAME ID NULL,
                     // I MIGHT GET NEW USERS TO ENTER IT THERE
                 })
+                console.log('created username')
             }
         } catch (e) {
             console.log(e);
+            this.setState({loading: false})
             message.error(e.message)
         }
     }
 
     onFinishFailed = (err) => {
         console.log(err)
+    }
+
+    componentWillUnmount() {
+        console.log('unmounting...')
     }
 
     render() {
@@ -85,7 +96,7 @@ export class SignUp extends Component {
                 </Form.Item> */}
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
+                        <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>
                             Sign Up
                         </Button>
 

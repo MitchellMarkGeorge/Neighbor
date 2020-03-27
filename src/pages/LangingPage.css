@@ -1,5 +1,5 @@
 .landing-container {
-    background-color: #0BB5FF;
+    background-color: var(--primary-blue);
     height: 100%; 
     /* margin: auto; */
     display: flex;
