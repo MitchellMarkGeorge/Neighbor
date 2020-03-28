@@ -95,6 +95,10 @@
 
   }
 
+  .modal-title {
+      color: var(--primary-blue);
+  }
+
 @media (max-width: 700px) {
     /* think about this */
     /* .header-container {
