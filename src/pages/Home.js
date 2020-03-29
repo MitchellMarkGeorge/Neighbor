@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 
-import { HomeFilled, UserOutlined, UploadOutlined, VideoCameraOutlined } from '@ant-design/icons'
+import { HomeFilled, UserOutlined, UploadOutlined, VideoCameraOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
@@ -73,9 +73,7 @@ export class Home extends Component {
     addRequest = (requestObject) => {
         let request_ref = database.ref('requests')
 
-        request_ref.push({
-            
-        })
+        request_ref.push(requestObject)
     }
 
     handleChange = (event) => {
@@ -89,7 +87,11 @@ export class Home extends Component {
             // reconsider order
             let values =  await this.formRef.current.validateFields();
             this.formRef.current.resetFields();
-            console.log(values)
+            // chould just ask for it in Modal
+            // can also incude timestap for ordering
+            let request_object = {...values, requested_by: this.state.user.displayName}
+            this.addRequest(request_object);
+            console.log(request_object)
             this.setState({
                 showCreateModal: false,
                 creatButton: false
@@ -154,8 +156,8 @@ export class Home extends Component {
                         {/* Look into good placeholders */}
 
                         <Form.Item
-                            name="deliver_location"
-                            label="Deliver Location"
+                            name="delivery_location"
+                            label="Delivery Location"
                             rules={[
                                 {
                                     required: true,
@@ -184,8 +186,8 @@ export class Home extends Component {
                             label="Delivery Instructions"
                             rules={[
                                 {
-                                    required: false,
-
+                                    required: true,
+                                    message: 'Please input delivery instructions',
                                 },
                             ]}
                         >
@@ -206,10 +208,12 @@ export class Home extends Component {
                                 mode="multiple"
                                 style={{ width: '100%' }}
                                 placeholder="Essential items you need"
-                            >
-                                <Option value="food" label="Food">Food</Option>
-                                <Option value="medicine" label="Food">Medicine</Option>
-                                <Option value="other" label="Other">Other</Option>
+                            >   
+                            {/* Think about icons */}
+                            {/* Should i make the value uppercase */}
+                                <Option value="food" label="Food"><ShoppingCartOutlined/> Food</Option>
+                                <Option value="medicine" label="Food"><MedicineBoxOutlined/> Medicine</Option>
+                                <Option value="other" label="Other"><ShoppingOutlined /> Other</Option>
 
                             </Select>
                         </Form.Item>
@@ -219,7 +223,8 @@ export class Home extends Component {
                             label="Details"
                             rules={[
                                 {
-                                    required: false,
+                                    required: true,
+                                    message: "Please input any details about your request"
 
                                 },
                             ]}
@@ -233,7 +238,7 @@ export class Home extends Component {
                 </Modal>
 
                 <Modal>
-
+                            {/* might not even need another modal */}
                 </Modal>
                 <Layout className="layout">
                     <Header>
@@ -252,9 +257,11 @@ export class Home extends Component {
                         <Sider className="sider"
                             theme="light"
                             collapsible
+                            // breakpoint="sm"
+                            // collapsedWidth="0"
                             collapsed={this.state.collapsed}
                             onCollapse={this.onCollapse}>
-                            <div className="logo" />
+                            {/* <div className="logo" /> */}
                             <div className="user-detials">
                                 <Avatar icon={<UserOutlined />}></Avatar>
                                 {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.user.displayName}</div>}
@@ -271,10 +278,10 @@ export class Home extends Component {
                                     <VideoCameraOutlined />
                                     <span className="nav-text">Accepted Request</span>
                                 </Menu.Item>
-                                <Menu.Item key="3">
+                                {/* <Menu.Item key="3">
                                     <UploadOutlined />
                                     <span className="nav-text">COVID 19 Info</span>
-                                </Menu.Item>
+                                </Menu.Item> */}
                                 {/* <Menu.Item key="4">
                                 <UserOutlined />
                                 <span className="nav-text">nav 4</span>
@@ -286,7 +293,7 @@ export class Home extends Component {
 
                         </Sider>
                         <Content className="main-content">
-                            <h1>Hello there friends</h1>
+                            {/* <h1>Hello there friends</h1> */}
 
                             {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted user={this.state.user} />}
                         </Content>
