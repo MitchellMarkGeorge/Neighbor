@@ -6,6 +6,8 @@ import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
 import { auth, database } from '../services/firebase'
+import axios from 'axios';
+
 // console.log(auth.currentUser)
 import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, message } from 'antd';
 
@@ -13,7 +15,7 @@ import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, message } fro
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
-
+const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 export class Home extends Component {
 
     formRef = React.createRef();
@@ -27,6 +29,8 @@ export class Home extends Component {
             user: auth.currentUser,
             currentMenuKey: '1',
             userName: auth.currentUser.displayName,
+            latitude: undefined,
+            longitude: undefined,
             // requests: undefined,
             showCreateModal: false,
             showInfoModal: !!auth.currentUser.displayName,
@@ -41,12 +45,19 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(this.locationSuccess);
+        // }
         // if (!this.state.userName) {
         //     this.setState({showInfoModal: true, showCreateModal: false})
         // }
 
     }
+
+    // locationSuccess = (position) => {
+    //     const { latitude, longitude } = position.coords;
+    //     this.setState({ latitude, longitude });
+    // }
 
     onCollapse = (collapsed) => {
         console.log(collapsed);
@@ -95,13 +106,21 @@ export class Home extends Component {
             // chould just ask for it in Modal
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
+            // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
+            let response  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json`);
+            let geoData = (await response).data;
+            const [ first ] = geoData;
             let request_object = {
                 ...values,
+                lat: first.lat,
+                long: first.lon,
                 user_info: {
                     display_name: this.state.user.displayName,
                     uid: this.state.user.uid
                 }
             }
+            
+
             this.addRequest(request_object);
             console.log(request_object)
             this.setState({
@@ -141,9 +160,9 @@ export class Home extends Component {
             this.usernameRef.current.resetFields();
             const { user_name } = values;
             await this.state.user.updateProfile({
-                        displayName: user_name
-              
-                     })
+                displayName: user_name
+
+            })
             this.setState({ showInfoModal: !false, userName: user_name })
         } catch (e) {
             console.log(e);
@@ -151,7 +170,7 @@ export class Home extends Component {
         }
     }
 
-    
+
 
 
     render() {
@@ -279,7 +298,7 @@ export class Home extends Component {
                 <Modal
                     visible={!this.state.showInfoModal}
                     onOk={this.usernameOk}>
-                    
+
                     <Form
                         ref={this.usernameRef}
                         name="create_form"
@@ -333,11 +352,11 @@ export class Home extends Component {
                                 onClick={this.onMenuClick}>
                                 {/* Think about icons */}
                                 <Menu.Item key="1">
-                                    <SolutionOutlined/>
+                                    <SolutionOutlined />
                                     <span className="nav-text">Requests</span>
                                 </Menu.Item>
                                 <Menu.Item key="2">
-                                    <InboxOutlined/>
+                                    <InboxOutlined />
                                     <span className="nav-text">Accepted Request</span>
                                 </Menu.Item>
                                 {/* <Menu.Item key="3">

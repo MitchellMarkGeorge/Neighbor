@@ -53,7 +53,7 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
             Element = (
                 <Popconfirm
                     title="Are you sure delete this request?"
-                    onConfirm={() => {onConfirm(item)}}
+                    onConfirm={() => { onConfirm(item) }}
                     // onCancel={cancel}
                     okText="Yes"
                     cancelText="No">
@@ -92,6 +92,7 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
                     {/* might not use h3 */}
                     <h3>Requested By: {item.user_info.display_name}</h3>
                     <h3>Requested Items:{getIconList(item.requested_items).map((icon, index) => (<span key={index} style={{ marginLeft: '0.5rem', color: 'var(--primary-blue)' }}>{icon}</span>))}</h3>
+                    {page === "request" && <h3>Distance: {item.distance}m</h3>}
                 </>
                 : <>
 
