@@ -3,7 +3,44 @@
     font-size: 1.5rem;
 } */
 
+.base-div {
+    padding: 1rem;
+    height: 100%;
+}
+
+.base-div .ant-card {
+    height: 100%;
+}
+
+
 
 .more-text {
     color: var(--primary-blue)
+}
+
+.page-title {
+    font-size: 1.5rem;
+    /* 2rem */
+    /* If i make it 2 rem, i need to decrease the .list-body height */
+    color: var(--primary-blue); 
+    position: sticky; 
+    z-index: 2;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 1rem;
+    /* text-align: center; */
+    /* margin: 0;
+    margin-left: 1rem; */
+    margin-bottom: 0;
+    /* padding: 1rem 0; */
+    display: inline-block;
+    border-bottom: 1px solid #e8e8e8 !important;
+    /* might not need this */
+
+}
+
+.list-body {
+    height: 90%;
+    padding: 24px;
+    overflow: auto;
 }

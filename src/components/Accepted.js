@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { database } from '../services/firebase'
 
 import './list.css'
-import { Card } from 'antd';
 import { CardList } from './CardList';
 
 export class Accepted extends Component {
@@ -22,7 +21,7 @@ export class Accepted extends Component {
         accepted_request_ref.on('value', (snapshot) => {
             let acceptedRequests = []
             snapshot.forEach((item) => {
-                acceptedRequests.push(item.val())
+                acceptedRequests.push({ ...item.val(), key: item.key })
             });
             console.log(acceptedRequests);
             this.setState({ acceptedRequests })
@@ -34,7 +33,7 @@ export class Accepted extends Component {
     }
     render() {
         return (
-            <div style={{ padding: '1rem', height: '100%' }} >
+            <div className="base-div">
                 {/* Hello from Requests
 
                 <ul>
@@ -43,15 +42,23 @@ export class Accepted extends Component {
                     ))}
                 </ul> */}
 
-                <Card title="Accepted Requests" bordered={false} headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)'}}>
-                    {/* {this.state.acceptedRequests.map((item, index) => (
-                        <Card key={index}>{item.contact_info}</Card>
-                    ))} */}
+                <h1 className="page-title">Accepted Requests</h1>
+
+                <div className="list-body">
+                    {this.state.acceptedRequests?.length > 0
+                        ? <CardList list={this.state.acceptedRequests} page="accepted" />
+                        : <div>No Requests to display</div>}
+                    {/* Use Empty component */}
+                </div>
+
+                {/* <Card title="Accepted Requests" bordered={false} headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)'}}
+                bodyStyle={{ overflow: 'auto', height: '100%'}}>
+                    
 
                     {this.state.acceptedRequests?.length > 0
                         ? <CardList list={this.state.acceptedRequests} />
                         : <div>No Accepted Requests to display.</div>}
-                </Card>
+                </Card> */}
             </div>
         )
     }

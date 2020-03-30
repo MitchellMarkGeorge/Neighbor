@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 
 
-import { HomeFilled, UserOutlined, UploadOutlined, VideoCameraOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
+import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
 import { auth, database } from '../services/firebase'
 // console.log(auth.currentUser)
-import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input } from 'antd';
+import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, message } from 'antd';
 
 
 const { Header, Sider, Content } = Layout;
@@ -17,7 +17,7 @@ const { TextArea } = Input;
 export class Home extends Component {
 
     formRef = React.createRef();
-
+    usernameRef = React.createRef();
     constructor(props) {
         super(props);
         console.log(auth.currentUser);
@@ -26,9 +26,10 @@ export class Home extends Component {
             collapsed: false,
             user: auth.currentUser,
             currentMenuKey: '1',
+            userName: auth.currentUser.displayName,
             // requests: undefined,
             showCreateModal: false,
-            showInfoModal: false,
+            showInfoModal: !!auth.currentUser.displayName,
             creatButton: false
         }
 
@@ -40,6 +41,10 @@ export class Home extends Component {
     }
 
     componentDidMount() {
+
+        // if (!this.state.userName) {
+        //     this.setState({showInfoModal: true, showCreateModal: false})
+        // }
 
     }
 
@@ -82,14 +87,21 @@ export class Home extends Component {
 
     handleOk = async (e) => {
         console.log(e);
-        this.setState({creatButton: true})
+        this.setState({ creatButton: true })
         try {
             // reconsider order
-            let values =  await this.formRef.current.validateFields();
+            let values = await this.formRef.current.validateFields();
             this.formRef.current.resetFields();
             // chould just ask for it in Modal
             // can also incude timestap for ordering
-            let request_object = {...values, requested_by: this.state.user.displayName}
+            // let request_object = {...values, requested_by: this.state.user.displayName}
+            let request_object = {
+                ...values,
+                user_info: {
+                    display_name: this.state.user.displayName,
+                    uid: this.state.user.uid
+                }
+            }
             this.addRequest(request_object);
             console.log(request_object)
             this.setState({
@@ -98,8 +110,9 @@ export class Home extends Component {
             });
 
         } catch (e) {
-            this.setState({creatButton: false})
+            this.setState({ creatButton: false })
             console.log(e)
+            message.error(e.message)
         }
         // let values =  await this.formRef.current.validateFields();
         // console.log(values);
@@ -115,6 +128,31 @@ export class Home extends Component {
         });
     };
 
+    // setUsername = (event) => {
+    //     this.setState({ userName: event.target.value });
+    // }
+
+    usernameOk = async () => {
+        try {
+            // reconsider order
+            let values = await this.usernameRef.current.validateFields();
+            console.log(values);
+            // might be a bit early
+            this.usernameRef.current.resetFields();
+            const { user_name } = values;
+            await this.state.user.updateProfile({
+                        displayName: user_name
+              
+                     })
+            this.setState({ showInfoModal: !false, userName: user_name })
+        } catch (e) {
+            console.log(e);
+            message.error(e.message)
+        }
+    }
+
+    
+
 
     render() {
 
@@ -126,6 +164,8 @@ export class Home extends Component {
                     onCancel={this.handleCancel}
                     confirmLoading={this.state.creatButton}
                 >
+
+
 
 
                     <Form
@@ -165,7 +205,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="Where you want the delivery to be dropped off"/>
+                            <Input placeholder="Where you want the delivery to be dropped off" />
                         </Form.Item>
 
                         <Form.Item
@@ -178,7 +218,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="Prefed contact"/>
+                            <Input placeholder="Prefed contact" />
                         </Form.Item>
 
                         <Form.Item
@@ -191,7 +231,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="e.g: Leave it on the porch"/>
+                            <Input placeholder="e.g: Leave it on the porch" />
                         </Form.Item>
 
                         <Form.Item
@@ -208,11 +248,11 @@ export class Home extends Component {
                                 mode="multiple"
                                 style={{ width: '100%' }}
                                 placeholder="Essential items you need"
-                            >   
-                            {/* Think about icons */}
-                            {/* Should i make the value uppercase */}
-                                <Option value="food" label="Food"><ShoppingCartOutlined/> Food</Option>
-                                <Option value="medicine" label="Food"><MedicineBoxOutlined/> Medicine</Option>
+                            >
+                                {/* Think about icons */}
+                                {/* Should i make the value uppercase */}
+                                <Option value="food" label="Food"><ShoppingCartOutlined /> Food</Option>
+                                <Option value="medicine" label="Food"><MedicineBoxOutlined /> Medicine</Option>
                                 <Option value="other" label="Other"><ShoppingOutlined /> Other</Option>
 
                             </Select>
@@ -229,16 +269,38 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <TextArea placeholder="Any extra details you want pople to know about your request"/>
+                            <TextArea placeholder="Any extra details you want pople to know about your request" />
                         </Form.Item>
 
 
 
                     </Form>
                 </Modal>
+                <Modal
+                    visible={!this.state.showInfoModal}
+                    onOk={this.usernameOk}>
+                    
+                    <Form
+                        ref={this.usernameRef}
+                        name="create_form"
+                        size="small"
+                        layout="vertical">
+                        <h1 className="modal-title">Set a username</h1>
+                        <Form.Item
+                            name="user_name"
+                            label="Username"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your usrname',
+                                },
+                            ]}
+                        >
+                            <Input placeholder="Prefed username" />
+                        </Form.Item>
+                    </Form>
 
-                <Modal>
-                            {/* might not even need another modal */}
+
                 </Modal>
                 <Layout className="layout">
                     <Header>
@@ -264,18 +326,18 @@ export class Home extends Component {
                             {/* <div className="logo" /> */}
                             <div className="user-detials">
                                 <Avatar icon={<UserOutlined />}></Avatar>
-                                {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.user.displayName}</div>}
+                                {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.userName}</div>}
                             </div>
                             {/* Dark theme */}
                             <Menu theme="light" mode="inline" defaultSelectedKeys={[this.state.currentMenuKey]}
                                 onClick={this.onMenuClick}>
                                 {/* Think about icons */}
                                 <Menu.Item key="1">
-                                    <UserOutlined />
+                                    <SolutionOutlined/>
                                     <span className="nav-text">Requests</span>
                                 </Menu.Item>
                                 <Menu.Item key="2">
-                                    <VideoCameraOutlined />
+                                    <InboxOutlined/>
                                     <span className="nav-text">Accepted Request</span>
                                 </Menu.Item>
                                 {/* <Menu.Item key="3">

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { database } from '../services/firebase';
-import { Card } from 'antd';
 
 import './list.css'
 import { CardList } from './CardList';
@@ -23,7 +22,7 @@ export class Requests extends Component {
             let requests = []
             
             snapshot.forEach((item) => {
-                requests.push(item.val())
+                requests.push({...item.val(), key: item.key})
             });
             console.log(requests);
             this.setState({ requests })
@@ -36,7 +35,7 @@ export class Requests extends Component {
     }
     render() {
         return (
-            <div style={{ padding: '1rem', height: '100%' }} >
+            <div className="base-div" >
                 {/* Hello from Requests
 
                 <ul>
@@ -44,18 +43,27 @@ export class Requests extends Component {
                         <li key={index}>{item.contact_info}</li>
                     ))}
                 </ul> */}
+             
+                <h1 className="page-title">Requests</h1>
+                
+                <div className="list-body">
+                {this.state.requests?.length > 0 
+                    ? <CardList list={this.state.requests} page="request"/> 
+                    : <div>No Requests to display</div>}
+                    {/* Use Empty component */}
+                </div>
+                
 
-                <Card title="Requests" headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)'}} bordered={false}> 
-                {/* Avalible Requests */}
-                    {/* {this.state.requests.map((item, index) => (
-                        <Card key={index}>{item.contact_info}</Card>
-                    ))} */}
+                {/* <Card title="Requests" headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)', position: 'sticky', zIndex: 2}} 
+                bordered={false} bodyStyle={{ overflow: 'auto', height: '100%'}}>
+                  
+                
 
                     {this.state.requests.length > 0 
                     ? <CardList list={this.state.requests} /> 
                     : <div>No Requests to display</div>} 
-                    {/* could use empty component */}
-                </Card>
+                
+                </Card> */}
             </div>
         )
     }

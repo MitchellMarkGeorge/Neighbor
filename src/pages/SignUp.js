@@ -19,16 +19,16 @@ export class SignUp extends Component {
         try {
             const response = await signUp(email, password);
             console.log(response);
-            const { user } = response;
-            if (user) {
-                await user.updateProfile({
-                    displayName: name
-                    // IF BY THE TIME THE HOME ROUTE IS
-                    // LOADED AND DISPLAYNAME ID NULL,
-                    // I MIGHT GET NEW USERS TO ENTER IT THERE
-                })
-                console.log('created username')
-            }
+            // const { user } = response;
+            // if (user) {
+            //     await user.updateProfile({
+            //         displayName: name
+            //         // IF BY THE TIME THE HOME ROUTE IS
+            //         // LOADED AND DISPLAYNAME ID NULL,
+            //         // I MIGHT GET NEW USERS TO ENTER IT THERE
+            //     })
+            //     console.log('created username')
+            // }
         } catch (e) {
             console.log(e);
             this.setState({loading: false})
@@ -60,12 +60,12 @@ export class SignUp extends Component {
 
 
 
-                    <Form.Item
+                    {/* <Form.Item
                         name="name"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                     >
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         name="email"
