@@ -15,7 +15,7 @@ export class SignUp extends Component {
         this.setState({loading: true})
         console.log(values);
         
-        const { email, password, name } = values;
+        const { email, password } = values;
         try {
             const response = await signUp(email, password);
             console.log(response);
@@ -56,7 +56,7 @@ export class SignUp extends Component {
                     onFinish={this.onFinish}
                     onFinishFailed={this.onFinishFailed}
                 >
-                    <h1 className="form-title">Sign Up to <span className="neighbor-text">Neighbour</span></h1>
+                    <h1 className="form-title">Sign Up to <span className="neighbor-text">Neighbor</span></h1>
 
 
 

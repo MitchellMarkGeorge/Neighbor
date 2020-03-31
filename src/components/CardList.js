@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button, message, Popconfirm, Descriptions } from 'antd'
+import { Card, Button, message, Descriptions } from 'antd'
 import { auth, database } from '../services/firebase'
 // remove icons that are not used
 import { ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
@@ -25,19 +25,28 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
                 uid: auth.currentUser.uid
             }
         }
+        // remove distance
+        delete updatedObject["distance"];
         let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
         let updates = {};
         updates[`/requests/${item.key}`] = null;
         updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
-        await database.ref().update(updates);
-        message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab;')
-        // do i need to return it?
+        try {
+            await database.ref().update(updates);
+            message.success('Thak you for accepting a new request! Plase contact the user of the request for more details.', 7)
+            // message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab. Plase contact the user of the request for more details.')
+            // do i need to return it?
+        } catch (e) {
+            console.log(e);
+            message.error('There was an error in accepting this request. Try again later.')
+        }
     }
 
     const onConfirm = async (item) => {
         console.log(item.key)
         try {
-            await database.ref(`/accepted_requests/${auth.currentUser.uid}/${item.key}`).remove()
+            await database.ref(`/accepted_requests/${auth.currentUser.uid}/${item.key}`).remove();
+            message.success('Thank you for helping out in your community! Stay safe!')
         } catch (e) {
             message.error('Unable to remove Accepted Request')
         }
@@ -51,14 +60,15 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
             } else { Element = <div>You can not accept your own request.</div> }
         } else {
             Element = (
-                <Popconfirm
-                    title="Are you sure delete this request?"
-                    onConfirm={() => { onConfirm(item) }}
-                    // onCancel={cancel}
-                    okText="Yes"
-                    cancelText="No">
-                    <Button type="danger">Delete</Button>
-                </Popconfirm>
+                // <Popconfirm
+                //     title="Are you sure delete this request?"
+                //     onConfirm={() => { onConfirm(item) }}
+                //     // onCancel={cancel}
+                //     okText="Yes"
+                //     cancelText="No">
+                    <Button type="danger" onClick={() => { onConfirm(item) }}>Complete Request</Button>
+                    
+                // </Popconfirm>
             )
 
         }
@@ -92,7 +102,9 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
                     {/* might not use h3 */}
                     <h3>Requested By: {item.user_info.display_name}</h3>
                     <h3>Requested Items:{getIconList(item.requested_items).map((icon, index) => (<span key={index} style={{ marginLeft: '0.5rem', color: 'var(--primary-blue)' }}>{icon}</span>))}</h3>
-                    {page === "request" && <h3>Distance: {item.distance}m</h3>}
+                    {page === "request" && item.distance && <h3>Distance: {item.distance}m away from you</h3>}
+                    {/* Should the distance be displyed in accepted */}
+                    {/* {<h3>Distance: {item.distance}m away from you</h3>} */}
                 </>
                 : <>
 
@@ -101,11 +113,11 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
                     >
                         {/* title="item_descriptions"> */}
                         <Descriptions.Item label="Requested By">{item.user_info.display_name}</Descriptions.Item>
-                        {/* Link to google maps */}
-                        <Descriptions.Item label="Delivery Location">{item.delivery_location}</Descriptions.Item>
+                        {/* Link to google maps{item.delivery_location} */}
+                        <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank">{item.delivery_location}</a></Descriptions.Item>
                         <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>
                         <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
-                        <Descriptions.Item label="Requested Items">{item.requested_items.join(', ')}</Descriptions.Item>
+                        <Descriptions.Item label="Requested Items"><p style={{ textTransform: 'capitalize', margin: 0 }}>{item.requested_items.join(', ')}</p></Descriptions.Item>
                         <Descriptions.Item label="Details">{item.details}</Descriptions.Item>
                     </Descriptions>
                     {getElement(item)}
@@ -140,19 +152,19 @@ export class CardList extends Component {
         this.setState({ currentRequestIndex: null })
     }
 
-    addToAccepted = (item) => {
-        let updatedObject = {
-            ...item, accepted_user_info: {
-                display_name: auth.currentUser.displayName,
-                uid: auth.currentUseruser.uid
-            }
-        }
-        let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
-        let updates = {};
-        updates[`/requests/${item.key}`] = null;
-        updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
-        return database.ref().update(updates);
-    }
+    // addToAccepted = (item) => {
+    //     let updatedObject = {
+    //         ...item, accepted_user_info: {
+    //             display_name: auth.currentUser.displayName,
+    //             uid: auth.currentUseruser.uid
+    //         }
+    //     }
+    //     let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
+    //     let updates = {};
+    //     updates[`/requests/${item.key}`] = null;
+    //     updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
+    //     return database.ref().update(updates);
+    // }
 
     render() {
         return (

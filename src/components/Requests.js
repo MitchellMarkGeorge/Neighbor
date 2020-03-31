@@ -4,18 +4,19 @@ import { database } from '../services/firebase';
 
 import './list.css'
 import { CardList } from './CardList';
-import { message } from 'antd';
+import { message, Spin, Empty } from 'antd';
 import LatLon from 'geodesy/latlon-ellipsoidal-vincenty.js';
 // import { distance } from '../services/distance';
 
 export class Requests extends Component {
     // recive current user as prop?
-    userLocation
+    userLocation;
     constructor(props) {
         super(props);
 
         this.state = {
             requests: [],
+            loading: true,
             currentRequest: undefined
         }
     }
@@ -36,20 +37,22 @@ export class Requests extends Component {
 
     }
 
-    
+
 
     componentDidMount() { // will this be called everytime the meny switches
         if (navigator.geolocation) {
+            console.log(this.userLocation)
+            // if (!this.userLocation)
             navigator.geolocation.getCurrentPosition(this.success, this.error);
         } else {
-            this.loadRequests();
+            this.loadRequests(); //need a loader 
 
         }
         // console.log('Request component mounting...')
         // const request_ref = database.ref('requests');
         // request_ref.on('value', (snapshot) => {
         //     let requests = []
-            
+
         //     snapshot.forEach((item) => {
         //         requests.push({...item.val(), key: item.key})
         //     });
@@ -61,7 +64,7 @@ export class Requests extends Component {
     sortItems = (array) => {
         let sorted_array = array.sort((a, b) => a.distance - b.distance);
         console.log(sorted_array)
-        this.setState({requests: sorted_array})
+        this.setState({ requests: sorted_array, loading: false })
     }
 
     loadRequests = () => {
@@ -70,7 +73,7 @@ export class Requests extends Component {
             let requests = []
             // if (this.lat && this,)
             snapshot.forEach((item) => {
-                let newItem = {...item.val(), key: item.key}
+                let newItem = { ...item.val(), key: item.key }
                 if (this.userLocation) {
                     // should i just use the newItem
                     let itemLocation = new LatLon(item.val().lat, item.val().long)
@@ -78,7 +81,7 @@ export class Requests extends Component {
                     newItem['distance'] = this.userLocation.distanceTo(itemLocation);
                     requests.push(newItem)
                 } else {
-                    requests.push({...item.val(), key: item.key})
+                    requests.push({ ...item.val(), key: item.key })
                 }
                 // requests.push({...item.val(), key: item.key})
             });
@@ -86,7 +89,7 @@ export class Requests extends Component {
             if (this.userLocation) {
                 this.sortItems(requests);
             } else {
-                this.setState({ requests })
+                this.setState({ requests, loading: false })
             }
             // this.setState({ requests })
         })
@@ -106,16 +109,24 @@ export class Requests extends Component {
                         <li key={index}>{item.contact_info}</li>
                     ))}
                 </ul> */}
-             
+
                 <h1 className="page-title">Requests</h1>
-                
-                <div className="list-body">
-                {this.state.requests?.length > 0 
-                    ? <CardList list={this.state.requests} page="request"/> 
-                    : <div>No Requests to display</div>}
-                    {/* Use Empty component */}
-                </div>
-                
+
+                {/* <Spin spinning={this.state.loading}> */}
+                    {/* // tip="Loading requests..."> */}
+                    <div className={this.state.loading ? 'spinning-loading': "list-body"}>
+
+                        
+                        <Spin spinning={this.state.loading} size="large">
+                        {this.state.requests?.length 
+                        // || !this.state.loading 
+                            ? <CardList list={this.state.requests} page="request" />
+                            : <div>{!this.state.loading? 'No requests to display.': ''}</div>}
+                        {/* Use Empty component */}
+                        </Spin>
+                    </div>
+                {/* </Spin> */} 
+
 
                 {/* <Card title="Requests" headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)', position: 'sticky', zIndex: 2}} 
                 bordered={false} bodyStyle={{ overflow: 'auto', height: '100%'}}>

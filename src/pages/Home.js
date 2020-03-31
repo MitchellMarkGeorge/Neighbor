@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 
-import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined } from '@ant-design/icons'
+import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
@@ -12,10 +13,21 @@ import axios from 'axios';
 import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, message } from 'antd';
 
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
 const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
+
+const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minWidth: 701 })
+    return isDesktop ? children : null
+  }
+  
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxWidth: 700 })
+    return isMobile ? children : null
+  }
+  
 export class Home extends Component {
 
     formRef = React.createRef();
@@ -102,12 +114,12 @@ export class Home extends Component {
         try {
             // reconsider order
             let values = await this.formRef.current.validateFields();
-            this.formRef.current.resetFields();
+            
             // chould just ask for it in Modal
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
-            let response  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json`);
+            let response  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
             let geoData = (await response).data;
             const [ first ] = geoData;
             let request_object = {
@@ -123,15 +135,17 @@ export class Home extends Component {
 
             this.addRequest(request_object);
             console.log(request_object)
+            this.formRef.current.resetFields();
             this.setState({
                 showCreateModal: false,
                 creatButton: false
             });
-
+            message.success('Your reqest has been added to the list!')
         } catch (e) {
             this.setState({ creatButton: false })
             console.log(e)
-            message.error(e.message)
+            // use e.message
+            message.error('Unable to create new Request. Try again lainer')
         }
         // let values =  await this.formRef.current.validateFields();
         // console.log(values);
@@ -157,12 +171,13 @@ export class Home extends Component {
             let values = await this.usernameRef.current.validateFields();
             console.log(values);
             // might be a bit early
-            this.usernameRef.current.resetFields();
+            // this.usernameRef.current.resetFields();
             const { user_name } = values;
             await this.state.user.updateProfile({
                 displayName: user_name
 
             })
+            this.usernameRef.current.resetFields();
             this.setState({ showInfoModal: !false, userName: user_name })
         } catch (e) {
             console.log(e);
@@ -334,7 +349,9 @@ export class Home extends Component {
                             </ul>
                         </div>
                     </Header>
+                    
                     <Layout>
+                        <Desktop>
                         <Sider className="sider"
                             theme="light"
                             collapsible
@@ -373,13 +390,31 @@ export class Home extends Component {
                             </div>
 
                         </Sider>
+                        </Desktop>
                         <Content className="main-content">
                             {/* <h1>Hello there friends</h1> */}
 
                             {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted user={this.state.user} />}
                         </Content>
                     </Layout>
-                    {/* <Footer>Footer</Footer> */}
+                    <Mobile>
+                        <Footer className="tab-bar">
+                            <div onClick={() => {this.setState({showCreateModal: true})}}>
+                                <PlusCircleOutlined/>
+                                {/* <p>Creat New Request</p> */}
+                            </div>
+
+                            <div onClick={() => {this.setState({currentMenuKey: '1'})}}>
+                                <UserOutlined/> 
+                                {/* <p>Requests</p> */}
+                            </div>
+
+                            <div onClick={() => {this.setState({currentMenuKey: '2'})}}>
+                                <InboxOutlined/>
+                                {/* <p>Accepted Requests</p> */}
+                            </div>
+                        </Footer>
+                    </Mobile>
                 </Layout>
             </>
         )

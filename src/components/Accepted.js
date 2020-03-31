@@ -3,12 +3,14 @@ import { database } from '../services/firebase'
 
 import './list.css'
 import { CardList } from './CardList';
+import { Spin, Empty } from 'antd';
 
 export class Accepted extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
             acceptedRequests: [],
             currentRequest: undefined
         }
@@ -24,7 +26,7 @@ export class Accepted extends Component {
                 acceptedRequests.push({ ...item.val(), key: item.key })
             });
             console.log(acceptedRequests);
-            this.setState({ acceptedRequests })
+            this.setState({ acceptedRequests, loading: false })
         })
     }
 
@@ -44,12 +46,17 @@ export class Accepted extends Component {
 
                 <h1 className="page-title">Accepted Requests</h1>
 
-                <div className="list-body">
-                    {this.state.acceptedRequests?.length > 0
-                        ? <CardList list={this.state.acceptedRequests} page="accepted" />
-                        : <div>No Requests to display</div>}
-                    {/* Use Empty component */}
-                </div>
+                <div className={this.state.loading ? 'spinning-loading': "list-body"}>
+
+                        
+                        <Spin spinning={this.state.loading} size="large">
+                        {this.state.acceptedRequests?.length 
+                        // || !this.state.loading 
+                            ? <CardList list={this.state.acceptedRequests} page="accepted" />
+                            : <div>{!this.state.loading? 'You have not accepted any requests yet.': ''}</div>}
+                        {/* Use Empty component */}
+                        </Spin>
+                    </div>
 
                 {/* <Card title="Accepted Requests" bordered={false} headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)'}}
                 bodyStyle={{ overflow: 'auto', height: '100%'}}>
