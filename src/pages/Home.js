@@ -18,7 +18,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 
-const Desktop = ({ children }) => {
+const Desktop = ({ children }) => { // reconsider this
     const isDesktop = useMediaQuery({ minWidth: 701 })
     return isDesktop ? children : null
   }
@@ -45,7 +45,11 @@ export class Home extends Component {
             longitude: undefined,
             // requests: undefined,
             showCreateModal: false,
-            showInfoModal: !!auth.currentUser.displayName,
+            // used if the user already has a username
+            // if they dont, a modal will show
+
+            // could also ust this.state.userName
+            hasUsername: !!auth.currentUser.displayName,
             creatButton: false
         }
 
@@ -56,15 +60,6 @@ export class Home extends Component {
 
     }
 
-    componentDidMount() {
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(this.locationSuccess);
-        // }
-        // if (!this.state.userName) {
-        //     this.setState({showInfoModal: true, showCreateModal: false})
-        // }
-
-    }
 
     // locationSuccess = (position) => {
     //     const { latitude, longitude } = position.coords;
@@ -72,12 +67,12 @@ export class Home extends Component {
     // }
 
     onCollapse = (collapsed) => {
-        console.log(collapsed);
+        // console.log(collapsed);
         this.setState({ collapsed });
     };
 
     onMenuClick = ({ item, key, keyPath, domEvent }) => {
-        console.log(key);
+        // console.log(key);
         this.setState({ currentMenuKey: key })
     }
 
@@ -93,9 +88,9 @@ export class Home extends Component {
         this.setState({ showCreateModal: true })
     }
 
-    showInfoModal = () => {
+    showUsernameModal = () => {
         // make sure create modal is closed
-        this.setState({ showInfoModal: true })
+        this.setState({ hasUsername: true })
     }
 
     addRequest = (requestObject) => {
@@ -104,12 +99,9 @@ export class Home extends Component {
         request_ref.push(requestObject)
     }
 
-    handleChange = (event) => {
-
-    }
-
+    
     handleOk = async (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({ creatButton: true })
         try {
             // reconsider order
@@ -119,8 +111,10 @@ export class Home extends Component {
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
-            let response  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
-            let geoData = (await response).data;
+            let response  = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
+            // WILL FAIL IF LOCATION ISNT GOOD
+            let geoData = await response.data;
+            //Best result
             const [ first ] = geoData;
             let request_object = {
                 ...values,
@@ -134,7 +128,7 @@ export class Home extends Component {
             
 
             this.addRequest(request_object);
-            console.log(request_object)
+            // console.log(request_object)
             this.formRef.current.resetFields();
             this.setState({
                 showCreateModal: false,
@@ -145,7 +139,7 @@ export class Home extends Component {
             this.setState({ creatButton: false })
             console.log(e)
             // use e.message
-            message.error('Unable to create new Request. Try again lainer')
+            message.error('Unable to create new Request. Please confirm that all of your fields are valid. ')
         }
         // let values =  await this.formRef.current.validateFields();
         // console.log(values);
@@ -155,7 +149,7 @@ export class Home extends Component {
     };
 
     handleCancel = e => {
-        console.log(e);
+        
         this.setState({
             showCreateModal: false,
         });
@@ -178,7 +172,7 @@ export class Home extends Component {
 
             })
             this.usernameRef.current.resetFields();
-            this.setState({ showInfoModal: !false, userName: user_name })
+            this.setState({ hasUsername: true, userName: user_name })
         } catch (e) {
             console.log(e);
             message.error(e.message)
@@ -248,7 +242,7 @@ export class Home extends Component {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your prefered contact info',
+                                    message: 'Please input your prefered contact information',
                                 },
                             ]}
                         >
@@ -303,7 +297,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <TextArea placeholder="Any extra details you want pople to know about your request" />
+                            <TextArea placeholder="Any details you want people to know about your request" />
                         </Form.Item>
 
 
@@ -311,7 +305,7 @@ export class Home extends Component {
                     </Form>
                 </Modal>
                 <Modal
-                    visible={!this.state.showInfoModal}
+                    visible={!this.state.hasUsername}
                     onOk={this.usernameOk}>
 
                     <Form
@@ -330,7 +324,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="Prefed username" />
+                            <Input placeholder="Prefered username" />
                         </Form.Item>
                     </Form>
 
@@ -405,7 +399,7 @@ export class Home extends Component {
                             </div>
 
                             <div onClick={() => {this.setState({currentMenuKey: '1'})}}>
-                                <UserOutlined/> 
+                                <SolutionOutlined/> 
                                 {/* <p>Requests</p> */}
                             </div>
 

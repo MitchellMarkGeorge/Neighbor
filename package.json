@@ -17,6 +17,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "deploy_functions": "firebase deploy --only functions",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

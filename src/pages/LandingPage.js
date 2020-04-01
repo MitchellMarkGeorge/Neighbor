@@ -24,7 +24,7 @@ export class Landing extends Component {
 
                     <p>Request help from people in your community in getting things from the outside world during this pandemic period.</p>
                     <div>
-                        <Button onClick={this.goToLogin}>Login</Button> <Button onClick={this.goToSignUp}>Sign Up</Button>
+                        <Button type="primary" onClick={this.goToLogin}>Login</Button> <Button type="primary" onClick={this.goToSignUp}>Sign Up</Button>
                     </div>
 
                 </div>

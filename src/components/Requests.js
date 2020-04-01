@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { database } from '../services/firebase';
-
-
 import './list.css'
 import { CardList } from './CardList';
-import { message, Spin, Empty } from 'antd';
+import { message, Spin } from 'antd';
 import LatLon from 'geodesy/latlon-ellipsoidal-vincenty.js';
-// import { distance } from '../services/distance';
+
 
 export class Requests extends Component {
     // recive current user as prop?
@@ -97,7 +95,7 @@ export class Requests extends Component {
 
     componentWillUnmount() {
         // removes all callbacks
-        database.ref('requests').off()
+        database.ref('requests').off();
     }
     render() {
         return (

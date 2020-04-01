@@ -3,7 +3,7 @@ import { database } from '../services/firebase'
 
 import './list.css'
 import { CardList } from './CardList';
-import { Spin, Empty } from 'antd';
+import { Spin } from 'antd';
 
 export class Accepted extends Component {
 

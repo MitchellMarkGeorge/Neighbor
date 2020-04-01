@@ -3,7 +3,7 @@ import { Card, Button, message, Descriptions } from 'antd'
 import { auth, database } from '../services/firebase'
 // remove icons that are not used
 import { ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
-
+import axios from 'axios';
 function CardExtra({ stateIndex, cardIndex, onItemMore, dismiss }) {
     return (
         <>
@@ -16,7 +16,7 @@ function CardExtra({ stateIndex, cardIndex, onItemMore, dismiss }) {
 
 
 
-function CardBody({ item, stateIndex, cardIndex, page }) {
+function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
     const addToAccepted = async (item) => {
         let updatedObject = {
@@ -33,12 +33,21 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
         updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
         try {
             await database.ref().update(updates);
-            message.success('Thak you for accepting a new request! Plase contact the user of the request for more details.', 7)
+            dismiss();
+            message.success('Thank you for accepting a new request! Plase contact the creator of the request for more details.', 7)
             // message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab. Plase contact the user of the request for more details.')
             // do i need to return it?
+
+            //Email server - use localhost:5000 in development
+            // could just pass the id annd get the name in the server
+            await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
+                user_id: updatedObject.user_info.uid,
+                user_name: updatedObject.user_info.display_name, // could just get in server
+                accepting_user: updatedObject.accepted_user_info.display_name
+            })
         } catch (e) {
             console.log(e);
-            message.error('There was an error in accepting this request. Try again later.')
+             message.error('An error occured in accpting this request.')
         }
     }
 
@@ -46,7 +55,8 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
         console.log(item.key)
         try {
             await database.ref(`/accepted_requests/${auth.currentUser.uid}/${item.key}`).remove();
-            message.success('Thank you for helping out in your community! Stay safe!')
+            dismiss(); // should i call it earlier
+            message.success('Thank you for helping out in your community! Stay safe!');
         } catch (e) {
             message.error('Unable to remove Accepted Request')
         }
@@ -91,7 +101,7 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
 
             return icon;
         })
-        console.log(iconList)
+        // console.log(iconList)
         return iconList;
     }
     return (
@@ -114,7 +124,7 @@ function CardBody({ item, stateIndex, cardIndex, page }) {
                         {/* title="item_descriptions"> */}
                         <Descriptions.Item label="Requested By">{item.user_info.display_name}</Descriptions.Item>
                         {/* Link to google maps{item.delivery_location} */}
-                        <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank">{item.delivery_location}</a></Descriptions.Item>
+                        <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>
                         <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>
                         <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
                         <Descriptions.Item label="Requested Items"><p style={{ textTransform: 'capitalize', margin: 0 }}>{item.requested_items.join(', ')}</p></Descriptions.Item>
@@ -176,7 +186,7 @@ export class CardList extends Component {
                     <Card hoverable title={item.delivery_location} style={{ marginBottom: '1rem' }}
                         extra={<CardExtra stateIndex={this.state.currentRequestIndex} cardIndex={index} onItemMore={() => { this.onItemMore(index) }} dismiss={this.dismiss} />}
                         key={index}>
-                        <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} />
+                        <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss}/>
                         {/* <h3>Requested By: {item.user_info.display_name}</h3>
                         <h3>Requested Items: {item.requested_items.join(', ')}</h3>
                         {this.state.currentRequestIndex === index && <p>Hello {index}</p>} */}
