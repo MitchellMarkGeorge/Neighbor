@@ -93,7 +93,7 @@ export class SignUp extends Component {
                         </Button>
 
                     </Form.Item>
-                    <span style={{ margin: '1rem' }}>Already have an account? <Link to="/login">Login now!</Link></span>
+                    <div style={{ margin: '1rem', textAlign: 'center' }}>Already have an account? <Link to="/login">Login now!</Link></div>
                 </Form>
             </div>
         );

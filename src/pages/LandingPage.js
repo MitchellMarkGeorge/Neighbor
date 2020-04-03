@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 // Button
 import { HomeFilled } from '@ant-design/icons'
 import './LangingPage.css';
-import { Button } from 'antd';
+import { Button, Layout } from 'antd';
 
 export class Landing extends Component {
 
@@ -28,6 +28,8 @@ export class Landing extends Component {
                     </div>
 
                 </div>
+
+                
             </div>
         )
     }

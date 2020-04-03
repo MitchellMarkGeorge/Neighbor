@@ -15,7 +15,7 @@ export class Requests extends Component {
         this.state = {
             requests: [],
             loading: true,
-            currentRequest: undefined
+            
         }
     }
 
@@ -29,7 +29,7 @@ export class Requests extends Component {
 
     error = (e) => {
         console.log(e);
-        message.error('Unable to get location. Loading requsts normally')
+        message.error('Unable to get location. Loading requests normally')
 
         this.loadRequests();
 
@@ -39,11 +39,11 @@ export class Requests extends Component {
 
     componentDidMount() { // will this be called everytime the meny switches
         if (navigator.geolocation) {
-            console.log(this.userLocation)
+            // if the user has geolocation capabilities in their browser
             // if (!this.userLocation)
             navigator.geolocation.getCurrentPosition(this.success, this.error);
         } else {
-            this.loadRequests(); //need a loader 
+            this.loadRequests(); 
 
         }
         // console.log('Request component mounting...')
@@ -77,10 +77,10 @@ export class Requests extends Component {
                     let itemLocation = new LatLon(item.val().lat, item.val().long)
                     // itemLocation.distanceTo
                     newItem['distance'] = this.userLocation.distanceTo(itemLocation);
+                    // requests.push(newItem)
+                } 
                     requests.push(newItem)
-                } else {
-                    requests.push({ ...item.val(), key: item.key })
-                }
+                
                 // requests.push({...item.val(), key: item.key})
             });
             console.log(requests);

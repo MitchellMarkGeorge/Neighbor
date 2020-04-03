@@ -34,15 +34,15 @@ export class Home extends Component {
     usernameRef = React.createRef();
     constructor(props) {
         super(props);
-        console.log(auth.currentUser);
+        // console.log(auth.currentUser);
 
         this.state = {
             collapsed: false,
             user: auth.currentUser,
             currentMenuKey: '1',
             userName: auth.currentUser.displayName,
-            latitude: undefined,
-            longitude: undefined,
+            // latitude: undefined,
+            // longitude: undefined,
             // requests: undefined,
             showCreateModal: false,
             // used if the user already has a username
@@ -77,7 +77,13 @@ export class Home extends Component {
     }
 
     logOut = async () => {
-        await auth.signOut();
+        try {
+            await auth.signOut();
+        } catch (e) {
+            console.log(e);
+            message.error('Unable to log out')
+        }
+        
         // dont need to do this as the component will be unmounted
         // this.setState({user: null});
     }
@@ -111,6 +117,7 @@ export class Home extends Component {
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
+            // currently restricted to canada
             let response  = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
@@ -238,7 +245,7 @@ export class Home extends Component {
 
                         <Form.Item
                             name="contact_info"
-                            label="Contact"
+                            label="Contact info (email or phone number)"
                             rules={[
                                 {
                                     required: true,
@@ -246,7 +253,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="Prefed contact" />
+                            <Input placeholder="Prefered contact" />
                         </Form.Item>
 
                         <Form.Item
@@ -393,14 +400,15 @@ export class Home extends Component {
                     </Layout>
                     <Mobile>
                         <Footer className="tab-bar">
-                            <div onClick={() => {this.setState({showCreateModal: true})}}>
-                                <PlusCircleOutlined/>
-                                {/* <p>Creat New Request</p> */}
-                            </div>
-
+                            
                             <div onClick={() => {this.setState({currentMenuKey: '1'})}}>
                                 <SolutionOutlined/> 
                                 {/* <p>Requests</p> */}
+                            </div>
+
+                            <div onClick={() => {this.setState({showCreateModal: true})}}>
+                                <PlusCircleOutlined/>
+                                {/* <p>Creat New Request</p> */}
                             </div>
 
                             <div onClick={() => {this.setState({currentMenuKey: '2'})}}>

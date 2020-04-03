@@ -12,7 +12,7 @@ export class Accepted extends Component {
         this.state = {
             loading: true,
             acceptedRequests: [],
-            currentRequest: undefined
+            
         }
     }
 

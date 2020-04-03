@@ -5,6 +5,10 @@ export function logIn(email, password) {
     return auth.signInWithEmailAndPassword(email, password)
 }
 
-export function signUp (email, password) {
+export function signUp(email, password) {
     return auth.createUserWithEmailAndPassword(email, password)
+}
+
+export function sendPasswordReset(email) {
+    return auth.sendPasswordResetEmail(email);
 }

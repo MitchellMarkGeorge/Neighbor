@@ -34,17 +34,22 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         try {
             await database.ref().update(updates);
             dismiss();
-            message.success('Thank you for accepting a new request! Plase contact the creator of the request for more details.', 7)
+            message.success('Thank you for accepting a new request! The user\'s contact information will be revealed to you and you can contact the creator of this request.', 7)
             // message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab. Plase contact the user of the request for more details.')
             // do i need to return it?
 
             //Email server - use localhost:5000 in development
             // could just pass the id annd get the name in the server
+            // await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
+            //     user_id: updatedObject.user_info.uid,
+            //     user_name: updatedObject.user_info.display_name, // could just get in server
+            //     accepting_user: updatedObject.accepted_user_info.display_name
+            // });
+
             await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
-                user_id: updatedObject.user_info.uid,
-                user_name: updatedObject.user_info.display_name, // could just get in server
-                accepting_user: updatedObject.accepted_user_info.display_name
-            })
+                updated_object: updatedObject,
+                accepting_user_email: auth.currentUser.email
+            });
         } catch (e) {
             console.log(e);
              message.error('An error occured in accpting this request.')
@@ -104,7 +109,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         // console.log(iconList)
         return iconList;
     }
-    return (
+    return ( // protect user info
         <div>
             {stateIndex !== cardIndex
 
@@ -121,14 +126,16 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                     <Descriptions
                         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
                     >
+                        {/* Privacy for users */}
                         {/* title="item_descriptions"> */}
                         <Descriptions.Item label="Requested By">{item.user_info.display_name}</Descriptions.Item>
                         {/* Link to google maps{item.delivery_location} */}
-                        <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>
-                        <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>
+                        { <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>}
+                        {page === 'accepted' && <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>}
                         <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
                         <Descriptions.Item label="Requested Items"><p style={{ textTransform: 'capitalize', margin: 0 }}>{item.requested_items.join(', ')}</p></Descriptions.Item>
                         <Descriptions.Item label="Details">{item.details}</Descriptions.Item>
+                        {/* {page === 'request' && <div>For the sake of privacy, the user's contact information will not be shown.</div>} */}
                     </Descriptions>
                     {getElement(item)}
                     {/* <h3>Requested By :</h3> <span>{item.user_info.display_name}</span>
