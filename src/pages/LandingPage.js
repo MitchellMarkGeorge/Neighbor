@@ -17,20 +17,30 @@ export class Landing extends Component {
         this.props.history.push('/signup');
     }
     render() {
-        return ( // MIGHT JUST HAVE A GO TO HOME BUTTON IF USER IS ALREADY AUTHENTICATED
+        return (
+             
             <div className="landing-container">
                 <div className="inner-container">
                     <h1>Welcome to Neighbor! <span><HomeFilled /> </span></h1>
+                   
+                    <p>Created by Mitchell Mark-George</p>
 
                     <p>Request help from people in your community in getting things from the outside world during this pandemic period.</p>
+
+                    {/* <div>Created by Mitchell Mark-George</div> */}
                     <div>
                         <Button type="primary" onClick={this.goToLogin}>Login</Button> <Button type="primary" onClick={this.goToSignUp}>Sign Up</Button>
                     </div>
+
+                    {/* <div className="bottom-text">Created by Mitchell Mark-George</div> */}
 
                 </div>
 
                 
             </div>
+
+            
+            
         )
     }
 }

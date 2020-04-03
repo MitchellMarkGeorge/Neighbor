@@ -19,16 +19,26 @@
     text-align: center;
     font-size: 2.5rem;
     color: #fff;
+    /* margin-bottom: 1rem; */
 }
 
 .landing-container .inner-container p {
     text-align: center;
     color: #fff;
     font-size: 1.5rem;
+    /* margin-bottom: 1rem; */
 }
 
 .landing-container .inner-container div {
     text-align: center;
+}
+
+.bottom-text {
+    position: absolute;
+    /* bottom: 0; */
+    top: 300px;
+    right: 0;
+    left: 0;
 }
 
 .inner-container div button {

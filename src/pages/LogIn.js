@@ -112,6 +112,7 @@ export class LogIn extends Component {
                         </Form.Item>
                         <div style={{ margin: '1rem', textAlign: 'center' }}>Don't have an account? <Link to="/signup">Sign up now!</Link></div>
                         <div style={{ margin: '1rem', color: 'var(--primary-blue)', textAlign: 'center' }} onClick={this.setForgotPassword}>Forgot Password?</div>
+                        <div style={{ margin: '1rem', textAlign: 'center' }}>Created by Mitchell Mark-George</div> 
                     </Form>
                 </div>
             </>

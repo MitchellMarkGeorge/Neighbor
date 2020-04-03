@@ -58,6 +58,7 @@ export class SignUp extends Component {
                 >
                     <h1 className="form-title">Sign Up to <span className="neighbor-text">Neighbor</span></h1>
 
+                        {/* Aggreement */}
 
 
                     {/* <Form.Item
@@ -94,6 +95,7 @@ export class SignUp extends Component {
 
                     </Form.Item>
                     <div style={{ margin: '1rem', textAlign: 'center' }}>Already have an account? <Link to="/login">Login now!</Link></div>
+                    <div style={{ margin: '1rem', textAlign: 'center' }}>Created by Mitchell Mark-George</div> 
                 </Form>
             </div>
         );
