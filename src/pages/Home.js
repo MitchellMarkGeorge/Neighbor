@@ -41,9 +41,7 @@ export class Home extends Component {
             user: auth.currentUser,
             currentMenuKey: '1',
             userName: auth.currentUser.displayName,
-            // latitude: undefined,
-            // longitude: undefined,
-            // requests: undefined,
+            
             showCreateModal: false,
             // used if the user already has a username
             // if they dont, a modal will show
@@ -100,7 +98,7 @@ export class Home extends Component {
     }
 
     addRequest = (requestObject) => {
-        let request_ref = database.ref('requests')
+        let request_ref = database.ref('requests');
 
         request_ref.push(requestObject)
     }
@@ -121,7 +119,7 @@ export class Home extends Component {
             let response  = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
-            //Best result
+            //Best result - bind to ottawa
             const [ first ] = geoData;
             let request_object = {
                 ...values,
@@ -155,7 +153,7 @@ export class Home extends Component {
         // });
     };
 
-    handleCancel = e => {
+    handleCancel = () => {
         
         this.setState({
             showCreateModal: false,
@@ -396,6 +394,7 @@ export class Home extends Component {
                             {/* <h1>Hello there friends</h1> */}
 
                             {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted user={this.state.user} />}
+                            {/* Should i pass the props */}
                         </Content>
                     </Layout>
                     <Mobile>

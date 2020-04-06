@@ -21,7 +21,7 @@ export class Requests extends Component {
 
     success = (position) => {
         const { latitude, longitude } = position.coords;
-        this.userLocation = new LatLon(latitude, longitude)
+        this.userLocation = new LatLon(latitude, longitude);
         // this.lat = latitude;
         // this.long = longitude;
         this.loadRequests();
@@ -41,8 +41,11 @@ export class Requests extends Component {
         if (navigator.geolocation) {
             // if the user has geolocation capabilities in their browser
             // if (!this.userLocation)
+            // Do i need the error callback
+            // should i save it in the Home component
             navigator.geolocation.getCurrentPosition(this.success, this.error);
         } else {
+            // show messgae for no geolocation
             this.loadRequests(); 
 
         }
@@ -61,14 +64,14 @@ export class Requests extends Component {
 
     sortItems = (array) => {
         let sorted_array = array.sort((a, b) => a.distance - b.distance);
-        console.log(sorted_array)
+        console.log(sorted_array);
         this.setState({ requests: sorted_array, loading: false })
     }
 
     loadRequests = () => {
         const request_ref = database.ref('requests');
         request_ref.on('value', (snapshot) => {
-            let requests = []
+            let requests = [];
             // if (this.lat && this,)
             snapshot.forEach((item) => {
                 let newItem = { ...item.val(), key: item.key }

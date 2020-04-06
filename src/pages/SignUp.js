@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import "./authPages.css"
 import { Link } from 'react-router-dom';
@@ -86,7 +86,14 @@ export class SignUp extends Component {
                             placeholder="Password"
                         />
                     </Form.Item>
-                  
+
+                    <Form.Item
+                    name="checkbox"
+                    rules={[{ required: true, message: 'Please agree to our terms and conditions' }]}
+                    valuePropName="checked">
+                        <Checkbox>I agree to the <a href="https://www.termsandconditionsgenerator.com/live.php?token=dxFG66QMP2z6ZchkLpCZSlUMu8OUirJa" target="_blank" rel="noopener noreferrer">Terms and Conditions</a></Checkbox>
+                    </Form.Item>
+                        
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>

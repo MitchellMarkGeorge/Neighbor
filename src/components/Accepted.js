@@ -21,7 +21,7 @@ export class Accepted extends Component {
         // could also access from auth object
         const accepted_request_ref = database.ref(`accepted_requests/${this.props.user.uid}`);
         accepted_request_ref.on('value', (snapshot) => {
-            let acceptedRequests = []
+            let acceptedRequests = [];
             snapshot.forEach((item) => {
                 acceptedRequests.push({ ...item.val(), key: item.key })
             });
@@ -31,18 +31,13 @@ export class Accepted extends Component {
     }
 
     componentWillUnmount() {
+        // might just use auth.currentUser.uid
         database.ref(`accepted_requests/${this.props.user.uid}`).off();
     }
     render() {
         return (
             <div className="base-div">
-                {/* Hello from Requests
-
-                <ul>
-                    {this.state.requests.map((item, index) => (
-                        <li key={index}>{item.contact_info}</li>
-                    ))}
-                </ul> */}
+                
 
                 <h1 className="page-title">Accepted Requests</h1>
 
@@ -54,18 +49,11 @@ export class Accepted extends Component {
                         // || !this.state.loading 
                             ? <CardList list={this.state.acceptedRequests} page="accepted" />
                             : <div>{!this.state.loading? 'You have not accepted any requests yet.': ''}</div>}
-                        {/* Use Empty component */}
+                        
                         </Spin>
                     </div>
 
-                {/* <Card title="Accepted Requests" bordered={false} headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)'}}
-                bodyStyle={{ overflow: 'auto', height: '100%'}}>
-                    
-
-                    {this.state.acceptedRequests?.length > 0
-                        ? <CardList list={this.state.acceptedRequests} />
-                        : <div>No Accepted Requests to display.</div>}
-                </Card> */}
+                
             </div>
         )
     }

@@ -25,10 +25,11 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                 uid: auth.currentUser.uid
             }
         }
-        // remove distance
+        // remove distance so it is not saved in database
         delete updatedObject["distance"];
         let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
         let updates = {};
+        // this removes the item from request list and into the accepted request list
         updates[`/requests/${item.key}`] = null;
         updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
         try {
@@ -39,12 +40,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             // do i need to return it?
 
             //Email server - use localhost:5000 in development
-            // could just pass the id annd get the name in the server
-            // await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
-            //     user_id: updatedObject.user_info.uid,
-            //     user_name: updatedObject.user_info.display_name, // could just get in server
-            //     accepting_user: updatedObject.accepted_user_info.display_name
-            // });
+        
 
             await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
                 updated_object: updatedObject,
@@ -70,20 +66,16 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
     const getElement = (item) => {
         let Element;
         if (page === 'request') {
+            // making sure where users cannot accept thruer own erwqueat
             if (auth.currentUser.uid !== item.user_info.uid) {
                 Element = <Button type="primary" onClick={() => { addToAccepted(item) }}>Accept Request</Button>
             } else { Element = <div>You can not accept your own request.</div> }
         } else {
             Element = (
-                // <Popconfirm
-                //     title="Are you sure delete this request?"
-                //     onConfirm={() => { onConfirm(item) }}
-                //     // onCancel={cancel}
-                //     okText="Yes"
-                //     cancelText="No">
+               
                     <Button type="danger" onClick={() => { onConfirm(item) }}>Complete Request</Button>
                     
-                // </Popconfirm>
+             
             )
 
         }
@@ -138,16 +130,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                         {/* {page === 'request' && <div>For the sake of privacy, the user's contact information will not be shown.</div>} */}
                     </Descriptions>
                     {getElement(item)}
-                    {/* <h3>Requested By :</h3> <span>{item.user_info.display_name}</span>
                     
-                    <h3>Delivery Location :</h3> <span>{item.delivery_location}</span>
-                    <h3>Delivery Location :</h3> <span>{item.delivery_location}</span>
-                    <h3>Contact Info :</h3> <span>{item.contact_info}</span>
-                    <h3>Delivery Instructions :</h3> <span>{item.delivery_instructions}</span>
-                    <h3>Requested Items :</h3> <span>{item.requested_items.join(', ')}</span>
-                    <h3>Details :</h3> <span>{item.details}</span>
-                    
-                    {getElement(item)} */}
 
                 </>}
         </div>
@@ -169,19 +152,6 @@ export class CardList extends Component {
         this.setState({ currentRequestIndex: null })
     }
 
-    // addToAccepted = (item) => {
-    //     let updatedObject = {
-    //         ...item, accepted_user_info: {
-    //             display_name: auth.currentUser.displayName,
-    //             uid: auth.currentUseruser.uid
-    //         }
-    //     }
-    //     let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
-    //     let updates = {};
-    //     updates[`/requests/${item.key}`] = null;
-    //     updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
-    //     return database.ref().update(updates);
-    // }
 
     render() {
         return (
@@ -194,9 +164,7 @@ export class CardList extends Component {
                         extra={<CardExtra stateIndex={this.state.currentRequestIndex} cardIndex={index} onItemMore={() => { this.onItemMore(index) }} dismiss={this.dismiss} />}
                         key={index}>
                         <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss}/>
-                        {/* <h3>Requested By: {item.user_info.display_name}</h3>
-                        <h3>Requested Items: {item.requested_items.join(', ')}</h3>
-                        {this.state.currentRequestIndex === index && <p>Hello {index}</p>} */}
+                  
 
                     </Card>
 

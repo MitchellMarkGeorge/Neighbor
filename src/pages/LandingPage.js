@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 // Button
 import { HomeFilled } from '@ant-design/icons'
 import './LangingPage.css';
-import { Button, Layout } from 'antd';
+import { Button } from 'antd';
 
 export class Landing extends Component {
 
@@ -22,9 +22,10 @@ export class Landing extends Component {
             <div className="landing-container">
                 <div className="inner-container">
                     <h1>Welcome to Neighbor! <span><HomeFilled /> </span></h1>
-                   
-                    <p>Created by Mitchell Mark-George</p>
-
+                   {/* confirm font size */}
+                   {/* Reconsider spacing */}
+                    <p style={{margin: '1rem 2.5rem'}}>Created by Mitchell Mark-George</p>
+                    {/* style={{fontSize: '1.2rem'}} */}
                     <p>Request help from people in your community in getting things from the outside world during this pandemic period.</p>
 
                     {/* <div>Created by Mitchell Mark-George</div> */}
