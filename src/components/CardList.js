@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button, message, Descriptions } from 'antd'
+import { Card, Button, message, Descriptions, Popconfirm } from 'antd'
 import { auth, database } from '../services/firebase'
 // remove icons that are not used
 import { ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
@@ -18,6 +18,19 @@ function CardExtra({ stateIndex, cardIndex, onItemMore, dismiss }) {
 
 function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
+// sould use item argument in most functions
+    const deleteRequest = async (item) => {
+        dismiss();
+        let itemRef = database.ref(`requests/${item.key}`);
+        try {
+            await itemRef.remove();
+            message.success('Request deleted');
+        } catch (e) {
+            console.log(e);
+            message.error('There was an error in deleting this request')
+        }
+        
+    }
     const addToAccepted = async (item) => {
         let updatedObject = {
             ...item, accepted_user_info: {
@@ -27,6 +40,8 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         }
         // remove distance so it is not saved in database
         delete updatedObject["distance"];
+        // might delete key property
+        // delete updatedObject["key"]; // do i ne
         let newAcceptedRequestKey = database.ref(`accepted_requests/${auth.currentUser.uid}`).push().key;
         let updates = {};
         // this removes the item from request list and into the accepted request list
@@ -40,7 +55,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             // do i need to return it?
 
             //Email server - use localhost:5000 in development
-        
+
 
             await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
                 updated_object: updatedObject,
@@ -48,7 +63,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             });
         } catch (e) {
             console.log(e);
-             message.error('An error occured in accpting this request.')
+            message.error('An error occured in accpting this request.')
         }
     }
 
@@ -69,19 +84,34 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             // making sure where users cannot accept thruer own erwqueat
             if (auth.currentUser.uid !== item.user_info.uid) {
                 Element = <Button type="primary" onClick={() => { addToAccepted(item) }}>Accept Request</Button>
-            } else { Element = <div>You can not accept your own request.</div> }
+                // } else { Element = <div>You can not accept your own request.</div>  } // might have a Retract Request button
+            } else {
+                Element = (
+                    <Popconfirm
+                        title="Are you sure you want to delete this request?"
+                        okText="Yes"
+                        cancelText="No"
+                        onConfirm={() => deleteRequest(item)}
+
+                    >
+                        <Button type="danger">Delete Request</Button>
+                    </Popconfirm>
+                )
+            } // might have a Retract Request button
         } else {
-            Element = (
-               
-                    <Button type="danger" onClick={() => { onConfirm(item) }}>Complete Request</Button>
-                    
-             
-            )
+            Element = (<Button type="danger" onClick={() => { onConfirm(item) }}>Complete Request</Button>)
 
         }
 
         return Element;
 
+    }
+
+    const getName = (itemDisplayName) => {
+        
+        // let name;
+        return itemDisplayName === auth.currentUser.displayName ? itemDisplayName + ' (You)': itemDisplayName;
+        // return name; // could just return it outright
     }
 
     const getIconList = (list) => {
@@ -107,7 +137,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
                 ? <>
                     {/* might not use h3 */}
-                    <h3>Requested By: {item.user_info.display_name}</h3>
+                    <h3>Requested By: {getName(item.user_info.display_name)}</h3>
                     <h3>Requested Items:{getIconList(item.requested_items).map((icon, index) => (<span key={index} style={{ marginLeft: '0.5rem', color: 'var(--primary-blue)' }}>{icon}</span>))}</h3>
                     {page === "request" && item.distance && <h3>Distance: {item.distance}m away from you</h3>}
                     {/* Should the distance be displyed in accepted */}
@@ -120,9 +150,9 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                     >
                         {/* Privacy for users */}
                         {/* title="item_descriptions"> */}
-                        <Descriptions.Item label="Requested By">{item.user_info.display_name}</Descriptions.Item>
+                        <Descriptions.Item label="Requested By">{getName(item.user_info.display_name)}</Descriptions.Item>
                         {/* Link to google maps{item.delivery_location} */}
-                        { <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>}
+                        {<Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>}
                         {page === 'accepted' && <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>}
                         <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
                         <Descriptions.Item label="Requested Items"><p style={{ textTransform: 'capitalize', margin: 0 }}>{item.requested_items.join(', ')}</p></Descriptions.Item>
@@ -130,7 +160,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                         {/* {page === 'request' && <div>For the sake of privacy, the user's contact information will not be shown.</div>} */}
                     </Descriptions>
                     {getElement(item)}
-                    
+
 
                 </>}
         </div>
@@ -157,14 +187,16 @@ export class CardList extends Component {
         return (
             // should i have a div here
             // style={{overflow: 'auto', height: '300px'}}
-            <div style={{ minHeight: '100%' }}>
+            // used minHeight
+            <div style={{ height: '100%' }}>
                 {this.props.list.map((item, index) => (
 
                     <Card hoverable title={item.delivery_location} style={{ marginBottom: '1rem' }}
+                        headStyle={{ color: 'var(--primary-blue)' }} // bold Title
                         extra={<CardExtra stateIndex={this.state.currentRequestIndex} cardIndex={index} onItemMore={() => { this.onItemMore(index) }} dismiss={this.dismiss} />}
                         key={index}>
-                        <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss}/>
-                  
+                        <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss} />
+
 
                     </Card>
 

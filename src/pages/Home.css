@@ -1,7 +1,7 @@
 .layout {
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .layout header {
@@ -53,9 +53,9 @@
 .main-content {
     background-color: #fff;
     margin: 1rem; 
-    max-height: 100vh;
+    max-height: 100%;
  
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .sider {
@@ -99,15 +99,15 @@
   }
 
   .tab-bar {
-      /* margin: auto; */
-      max-width: 100vw;
-      overflow: hidden;
- 
-      background-color: var(--primary-blue);
-      color: #fff;
-      display: grid;
-      grid-gap: 2rem;
-      grid-template-columns: repeat(3, 1fr);
+          /* margin: auto; */
+    max-width: 100%;
+    overflow: hidden;
+    background-color: var(--primary-blue);
+    color: #fff;
+    display: grid;
+    grid-gap: 2rem;
+    z-index: 1;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .tab-bar div {

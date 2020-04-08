@@ -116,6 +116,7 @@ export class Home extends Component {
             // let request_object = {...values, requested_by: this.state.user.displayName}
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
             // currently restricted to canada
+            // move to seperate function
             let response  = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
@@ -213,6 +214,7 @@ export class Home extends Component {
                         }}
                     >
                         <h1 className="modal-title">Creat a new Request</h1>
+                        
 
                         {/* <Form.Item
                             name="requested_by"
@@ -230,7 +232,7 @@ export class Home extends Component {
 
                         <Form.Item
                             name="delivery_location"
-                            label="Delivery Location"
+                            label="Delivery Address"
                             rules={[
                                 {
                                     required: true,
@@ -303,10 +305,11 @@ export class Home extends Component {
                             ]}
                         >
                             <TextArea placeholder="Any details you want people to know about your request" />
+                            {/* <p>* Note: You cannot edit Requests after they are created</p> */}
                         </Form.Item>
 
 
-
+                        
                     </Form>
                 </Modal>
                 <Modal
@@ -340,7 +343,7 @@ export class Home extends Component {
                         <div className="header-container">
                             <h1>Neighbor <HomeFilled /> </h1>
                             <ul className="header-items">
-                                <li ><Button type="primary" danger onClick={this.logOut}>Log Out</Button></li>
+                                <li ><Button type="danger" onClick={this.logOut}>Log Out</Button></li>
                                 {/* <li><Avatar icon={<UserOutlined/>}></Avatar></li> */}
 
                                 {/* {this.state.user.displayName && <Avatar icon={UserOutlined}></Avatar>} */}
