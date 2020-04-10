@@ -3,8 +3,8 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import "./authPages.css"
 import { Link } from 'react-router-dom';
-import { message } from 'antd';
-import { signUp } from '../services/auth';
+// import { message } from 'antd';
+import { signUp, showNotification } from '../services/auth';
 
 export class SignUp extends Component {
     state = {
@@ -13,12 +13,13 @@ export class SignUp extends Component {
 
     onFinish = async (values) => {
         this.setState({loading: true})
-        console.log(values);
+        // console.log(values);
         
         const { email, password } = values;
         try {
-            const response = await signUp(email, password);
-            console.log(response);
+            await signUp(email, password);
+            // const response = await signUp(email, password);
+            // console.log(response);
             // const { user } = response;
             // if (user) {
             //     await user.updateProfile({
@@ -32,7 +33,8 @@ export class SignUp extends Component {
         } catch (e) {
             console.log(e);
             this.setState({loading: false})
-            message.error(e.message)
+            // message.error(e.message)
+            showNotification('error', e.message, null)
         }
     }
 
@@ -40,9 +42,9 @@ export class SignUp extends Component {
         console.log(err)
     }
 
-    componentWillUnmount() {
-        console.log('unmounting...')
-    }
+    // componentWillUnmount() {
+    //     console.log('unmounting...')
+    // }
 
     render() {
         return (

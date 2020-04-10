@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { database } from '../services/firebase';
 import './list.css'
 import { CardList } from './CardList';
-import { message, Spin } from 'antd';
+import { Spin } from 'antd';
 import LatLon from 'geodesy/latlon-ellipsoidal-vincenty.js';
+import { showNotification } from '../services/auth';
 
 
 export class Requests extends Component {
@@ -29,8 +30,8 @@ export class Requests extends Component {
 
     error = (e) => {
         console.log(e);
-        message.error('Unable to get location. Loading requests normally')
-
+        // message.error('Unable to get location. Loading requests normally')
+        showNotification('error', 'Unable to get location', 'Loading requests normally.')
         this.loadRequests();
 
     }
@@ -41,7 +42,7 @@ export class Requests extends Component {
         if (navigator.geolocation) {
             // if the user has geolocation capabilities in their browser
             // if (!this.userLocation)
-            // Do i need the error callback
+            
             // should i save it in the Home component
             navigator.geolocation.getCurrentPosition(this.success, this.error);
         } else {
@@ -64,7 +65,7 @@ export class Requests extends Component {
 
     sortItems = (array) => {
         let sorted_array = array.sort((a, b) => a.distance - b.distance);
-        console.log(sorted_array);
+        // console.log(sorted_array);
         this.setState({ requests: sorted_array, loading: false })
     }
 
@@ -86,7 +87,7 @@ export class Requests extends Component {
                 
                 // requests.push({...item.val(), key: item.key})
             });
-            console.log(requests);
+            // console.log(requests);
             if (this.userLocation) {
                 this.sortItems(requests);
             } else {

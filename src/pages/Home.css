@@ -90,6 +90,7 @@
       text-align: center;
       /* margin: 0 auto; */
       background-color: var(--primary-blue);
+      border: none;
       /* border-radius: 1rem; */
 
   }

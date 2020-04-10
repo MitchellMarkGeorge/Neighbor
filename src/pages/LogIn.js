@@ -3,9 +3,10 @@ import { Form, Input, Button, Modal } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import "./authPages.css"
 import { Link } from 'react-router-dom';
-import { logIn, sendPasswordReset } from '../services/auth';
+import { logIn, sendPasswordReset, showNotification } from '../services/auth';
 
-import { message } from 'antd';
+// import { message } from 'antd';
+
 // import { auth } from 'firebase';
 export class LogIn extends Component {
     state = {
@@ -14,16 +15,19 @@ export class LogIn extends Component {
     }
 
     onFinish = async (values) => {
-        console.log(values);
+        // console.log(values);
         this.setState({ loading: true })
         const { email, password } = values;
         try {
-            let response = await logIn(email, password);
-            console.log(response);
+            await logIn(email, password); 
+            // let response = await logIn(email, password);
+            // console.log(response);
         } catch (e) {
             console.log(e);
-            this.setState({ loading: false })
-            message.error(e.message)
+            this.setState({ loading: false });
+            // message.error(e.message)
+            // might still use message for this one
+            showNotification('error', e.message, null);
         }
     }
 
@@ -44,10 +48,12 @@ export class LogIn extends Component {
         const { email } = values;
         try {
             await sendPasswordReset(email);
-            message.success(`Password reset email sent to ${email}`)
+            // message.success(`Password reset email sent to ${email}`)
+            showNotification('success', `Password reset email sent to ${email}`, null)
         } catch (e) {
             console.log(e); // use e.message?
-            message.error('There was an error in sending the password reset email email')
+            // message.error('There was an error in sending the password reset email');
+            showNotification('error', 'There was an error in sending the password reset email', null)
         }
 
     }

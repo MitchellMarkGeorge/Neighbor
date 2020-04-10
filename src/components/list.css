@@ -34,8 +34,8 @@
     margin-bottom: 0;
     /* padding: 1rem 0; */
     display: inline-block;
-    border-bottom: 1px solid #e8e8e8 !important;
-    /* might not need this */
+    border-bottom: 1px solid #e8e8e8;
+    /* border: 1px solid #f0f0f0 */
 
 }
 
@@ -46,7 +46,15 @@
     overflow: auto;
 }
 
+/* .ant-card-body button {
+    background-color: var(--primary-blue);
+    border: none;
+} */
 
+.ant-card-body .accept-button {
+    background-color: var(--primary-blue);
+    border: none;
+}
 
 .spinning-loading {
     display: flex;

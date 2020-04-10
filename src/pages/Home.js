@@ -7,10 +7,12 @@ import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
 import { auth, database } from '../services/firebase'
+
 import axios from 'axios';
 
 // console.log(auth.currentUser)
-import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, message } from 'antd';
+import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input } from 'antd';
+import { showNotification } from '../services/auth';
 
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -79,7 +81,8 @@ export class Home extends Component {
             await auth.signOut();
         } catch (e) {
             console.log(e);
-            message.error('Unable to log out')
+            // message.error('Unable to log out');
+            showNotification('error', 'unable to Log Out', 'Try again later.')
         }
         
         // dont need to do this as the component will be unmounted
@@ -140,12 +143,14 @@ export class Home extends Component {
                 showCreateModal: false,
                 creatButton: false
             });
-            message.success('Your reqest has been added to the list!')
+            // message.success('Your reqest has been added to the list!');
+            showNotification('success', 'Your reqest has been added to the list!', null)
         } catch (e) {
             this.setState({ creatButton: false })
             console.log(e)
             // use e.message
-            message.error('Unable to create new Request. Please confirm that all of your fields are valid. ')
+            // message.error('Unable to create new Request. Please confirm that all of your fields are valid. ')
+            showNotification('error', 'Unable to create new request', 'Please confirm that all of your fields are valid.')
         }
         // let values =  await this.formRef.current.validateFields();
         // console.log(values);
@@ -181,7 +186,8 @@ export class Home extends Component {
             this.setState({ hasUsername: true, userName: user_name })
         } catch (e) {
             console.log(e);
-            message.error(e.message)
+            // message.error(e.message)
+            showNotification('error', e.message, null)
         }
     }
 
@@ -364,11 +370,14 @@ export class Home extends Component {
                             {/* <div className="logo" /> */}
                             <div className="user-detials">
                                 <Avatar icon={<UserOutlined />}></Avatar>
+                        {/* <Avatar>{this.state.userName.split('')[0]}</Avatar> */}
                                 {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.userName}</div>}
                             </div>
-                            {/* Dark theme */}
-                            <Menu theme="light" mode="inline" defaultSelectedKeys={[this.state.currentMenuKey]}
-                                onClick={this.onMenuClick}>
+                            
+                            {/* Will probably move to tabs */}
+                            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}
+                                onClick={this.onMenuClick}
+                                >
                                 {/* Think about icons */}
                                 <Menu.Item key="1">
                                     <SolutionOutlined />
@@ -394,10 +403,10 @@ export class Home extends Component {
                         </Sider>
                         </Desktop>
                         <Content className="main-content">
-                            {/* <h1>Hello there friends</h1> */}
+                            {/* default is request page */}
 
-                            {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted user={this.state.user} />}
-                            {/* Should i pass the props */}
+                            {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted />}
+                            
                         </Content>
                     </Layout>
                     <Mobile>

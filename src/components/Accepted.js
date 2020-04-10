@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import { database } from '../services/firebase'
+import { database, auth } from '../services/firebase'
 
 import './list.css'
 import { CardList } from './CardList';
 import { Spin } from 'antd';
 
-export class Accepted extends Component {
+// const userID = auth.currentUser.uid;
 
+export class Accepted extends Component {
+    // current user id - add to state?
+    userID;
     constructor(props) {
         super(props);
         this.state = {
@@ -14,25 +17,28 @@ export class Accepted extends Component {
             acceptedRequests: [],
             
         }
+
+        this.userID = auth.currentUser.uid;
     }
 
     componentDidMount() {
         // might make user prop variable
         // could also access from auth object
-        const accepted_request_ref = database.ref(`accepted_requests/${this.props.user.uid}`);
+        // used to use prop but was inconsistent
+        const accepted_request_ref = database.ref(`accepted_requests/${this.userID}`);
         accepted_request_ref.on('value', (snapshot) => {
             let acceptedRequests = [];
             snapshot.forEach((item) => {
                 acceptedRequests.push({ ...item.val(), key: item.key })
             });
-            console.log(acceptedRequests);
+            // console.log(acceptedRequests);
             this.setState({ acceptedRequests, loading: false })
         })
     }
 
     componentWillUnmount() {
         // might just use auth.currentUser.uid
-        database.ref(`accepted_requests/${this.props.user.uid}`).off();
+        database.ref(`accepted_requests/${this.userID}`).off();
     }
     render() {
         return (
