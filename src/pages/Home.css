@@ -54,12 +54,13 @@
     background-color: #fff;
     margin: 1rem; 
     max-height: 100%;
+    width: 100%;
  
     /* overflow: hidden; */
 }
 
 .sider {
-    /* light or dark theme */
+    /* might not need this*/
         overflow: auto;
         height: 100%; 
         /* color: rgba(255, 255, 255, 0.65); */

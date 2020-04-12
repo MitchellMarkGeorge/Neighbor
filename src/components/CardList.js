@@ -19,7 +19,7 @@ function CardExtra({ stateIndex, cardIndex, onItemMore, dismiss }) {
 // let _isMounted = false;
 function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
     // let _isMounted = false;
-// sould use item argument in most functions
+    // sould use item argument in most functions
     const deleteRequest = async (item) => {
         dismiss();
         let itemRef = database.ref(`requests/${item.key}`);
@@ -32,7 +32,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             // message.error('There was an error in deleting this request')
             showNotification('error', 'There was an error in deleting this request', null)
         }
-        
+
     }
     const addToAccepted = async (item) => {
         let updatedObject = {
@@ -96,7 +96,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             } else {
                 Element = (
                     <Popconfirm
-                    placement="bottom"
+                        placement="bottom"
                         title="Are you sure you want to delete this request?"
                         okText="Yes"
                         cancelText="No"
@@ -116,11 +116,11 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
     }
 
-    const getName = (itemUserUID) => {
-        let user_display_name = auth.currentUser.displayName;
-        // let name;
-        return itemUserUID === auth.currentUser.uid ? user_display_name + ' (You)': user_display_name;
-        // return name; // could just return it outright
+    const getName = (user_display_name, user_uid) => { // name nd uid parameters
+        // This method helps user distingush which requests are their own using their uid
+
+        return user_uid === auth.currentUser.uid ? user_display_name + ' (You)' : user_display_name;
+
     }
 
     const getIconList = (list) => {
@@ -141,10 +141,10 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         return iconList;
     }
 
-    const requested_by_name = getName(item.user_info.uid); 
+    const requested_by_name = getName(item.user_info.display_name, item.user_info.uid);
 
     return ( // protect user info
-        
+
         <div>
             {stateIndex !== cardIndex
 
@@ -207,8 +207,8 @@ export class CardList extends Component {
         // test by removing last request in array
         //TESTED: WORKS!
         if (this._isMounted) {
-        this.setState({ currentRequestIndex: null })
-    }
+            this.setState({ currentRequestIndex: null })
+        }
     }
 
 

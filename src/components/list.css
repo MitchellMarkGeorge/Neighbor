@@ -43,7 +43,9 @@
     
     height: 90%;
     padding: 24px;
-    overflow: auto;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    /* Might change this to scroll */
 }
 
 /* .ant-card-body button {
