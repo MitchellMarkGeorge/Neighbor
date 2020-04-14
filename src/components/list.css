@@ -8,9 +8,9 @@
     height: 100%;
 }
 
-.base-div .ant-card {
+/* .base-div .ant-card {
     height: 100%;
-}
+} */
 
 
 
@@ -31,9 +31,9 @@
     /* text-align: center; */
     /* margin: 0;
     margin-left: 1rem; */
-    margin-bottom: 0;
+    
     /* padding: 1rem 0; */
-    display: inline-block;
+    /* display: inline-block; */
     border-bottom: 1px solid #e8e8e8;
     /* border: 1px solid #f0f0f0 */
 
@@ -41,7 +41,10 @@
 
 .list-body {
     
-    height: 90%;
+    height: 90%; 
+    /* // shold i just yse margin */
+     /*50vh3  */
+    /* max-height */
     padding: 24px;
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
@@ -71,4 +74,12 @@
     .base-div {
         padding: 0;
     }
+
+    .list-body, .spinning-loading {
+        height: 55vh; 
+         /*Used 60  */
+        /* need to figujre this out */
+    }
+
+    
 }

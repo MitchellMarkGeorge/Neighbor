@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { useMediaQuery } from 'react-responsive'
+// import { useMediaQuery } from 'react-responsive'
 
 
 import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -13,6 +13,7 @@ import axios from 'axios';
 // console.log(auth.currentUser)
 import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input } from 'antd';
 import { showNotification } from '../services/auth';
+import { Mobile, Desktop } from '../components/Responsive';
 
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -20,15 +21,15 @@ const { Option } = Select;
 const { TextArea } = Input;
 const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 
-const Desktop = ({ children }) => { // reconsider this
-    const isDesktop = useMediaQuery({ minWidth: 701 })
-    return isDesktop ? children : null
-  }
+// const Desktop = ({ children }) => { // reconsider this
+//     const isDesktop = useMediaQuery({ minWidth: 701 })
+//     return isDesktop ? children : null
+//   }
   
-  const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxWidth: 700 })
-    return isMobile ? children : null
-  }
+//   const Mobile = ({ children }) => {
+//     const isMobile = useMediaQuery({ maxWidth: 700 })
+//     return isMobile ? children : null
+//   }
   
 export class Home extends Component {
 
@@ -238,7 +239,7 @@ export class Home extends Component {
 
                         <Form.Item
                             name="delivery_location"
-                            label="Delivery Address"
+                            label="Full Delivery Address"
                             rules={[
                                 {
                                     required: true,
@@ -340,6 +341,7 @@ export class Home extends Component {
                         >
                             <Input placeholder="Prefered username" />
                         </Form.Item>
+                        {/* <p>Since Neighbor uPlease add neighborottawa@outlook.com to your mailing list.</p> */}
                     </Form>
 
 
@@ -414,17 +416,17 @@ export class Home extends Component {
                             
                             <div onClick={() => {this.setState({currentMenuKey: '1'})}}>
                                 <SolutionOutlined/> 
-                                {/* <p>Requests</p> */}
+                                
                             </div>
 
                             <div onClick={() => {this.setState({showCreateModal: true})}}>
                                 <PlusCircleOutlined/>
-                                {/* <p>Creat New Request</p> */}
+                                
                             </div>
 
                             <div onClick={() => {this.setState({currentMenuKey: '2'})}}>
                                 <InboxOutlined/>
-                                {/* <p>Accepted Requests</p> */}
+                                
                             </div>
                         </Footer>
                     </Mobile>

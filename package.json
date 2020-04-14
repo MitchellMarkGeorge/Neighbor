@@ -17,7 +17,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "deploy_functions": "firebase deploy --only functions",
+    "mobile-test": "ngrok http 3000",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { SignUp } from './pages/SignUp';
 import { LogIn } from './pages/LogIn';
 import { Landing } from './pages/LandingPage';
+
 import {
   Route,
   BrowserRouter as Router,
@@ -13,6 +14,7 @@ import {
 } from "react-router-dom";
 
 import { auth } from './services/firebase'
+import { Tutorial } from './pages/Tutorial';
 
 // object destructoring
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
@@ -76,6 +78,7 @@ class App extends React.Component {
             <PrivateRoute path="/home" authenticated={this.state.authenticated} component={Home} />
             <PublicRoute path="/signup" authenticated={this.state.authenticated} component={SignUp} />
             <PublicRoute path="/login" authenticated={this.state.authenticated} component={LogIn} />
+            <Route path="/tutorial" component={Tutorial}/>
           </Switch>
         </Router>
       )

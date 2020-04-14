@@ -56,7 +56,8 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             // message.success('Thank you for accepting a new request! The user\'s contact information will be revealed to you and you can contact the creator of this request.', 7)
             showNotification('success', 'Thank you for accepting a new request!', "The user's contact information will be revealed to you and you can contact the creator of this request.", 5)
             // message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab. Plase contact the user of the request for more details.')
-            // do i need to return it?
+            
+            // Should i actually call it after request hs been sent to server?
 
             //Email server - use localhost:5000 in development
 
@@ -153,7 +154,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                     {/* <h3>Requested By: {getName(item.user_info.uid)}</h3> */}
                     <h3>Requested By: {requested_by_name}</h3>
                     <h3>Requested Items:{getIconList(item.requested_items).map((icon, index) => (<span key={index} style={{ marginLeft: '0.5rem', color: 'var(--primary-blue)' }}>{icon}</span>))}</h3>
-                    {page === "request" && item.distance && <h3>Distance: {item.distance}m away from you</h3>}
+                    {page === "request" && item.distance && <h3>Distance: {Number(item.distance / 1000).toFixed(1)}km away from you</h3>}
                     {/* Should the distance be displyed in accepted */}
                     {/* {<h3>Distance: {item.distance}m away from you</h3>} */}
                 </>

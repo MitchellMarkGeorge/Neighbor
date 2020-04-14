@@ -17,6 +17,7 @@
 .header-container {
     margin: auto;
     overflow: hidden;
+    max-width: 100%;
     /* color: #fff; */
     padding-left: 2rem;
 
@@ -53,16 +54,18 @@
 .main-content {
     background-color: #fff;
     margin: 1rem; 
+    /* height: 100%; */
     max-height: 100%;
     width: 100%;
  
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 .sider {
     /* might not need this*/
         overflow: auto;
         height: 100%; 
+        max-width: 100%;
         /* color: rgba(255, 255, 255, 0.65); */
         /* text-align: center; */
 

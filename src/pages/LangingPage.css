@@ -9,12 +9,17 @@
     /* color:#fff; */
 }
 
-.inner-container {
+.inner-container{
     margin: 1rem;
     color: #fff;
 }
 
-.landing-container .inner-container h1 {
+.tutorial-container {
+    padding: 1rem;
+    color: #fff;
+}
+
+.landing-container .inner-container h1, .tutorial-container h1 {
     /* margin: auto; */
     text-align: center;
     font-size: 2.5rem;
@@ -22,14 +27,33 @@
     /* margin-bottom: 1rem; */
 }
 
-.landing-container .inner-container p {
+.tutorial-container {
+    background-color: var(--primary-blue);
+    height: 100%; 
+}
+
+/* .tutorial-container video {
+    text-align: center;
+} */
+
+.story-text {
+    font-size: initial !important;
+}
+
+
+
+.landing-container .inner-container p, .tutorial-container p {
     text-align: center;
     color: #fff;
     font-size: 1.5rem;
     /* margin-bottom: 1rem; */
 }
 
-.landing-container .inner-container div {
+/* .tutorial-container p {
+    font-size: initial;
+} */
+
+.landing-container .inner-container div, .tutorial-container div {
     text-align: center;
 }
 

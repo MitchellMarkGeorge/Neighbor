@@ -21,6 +21,7 @@ export class Requests extends Component {
     }
 
     success = (position) => {
+        // console.log('here 2')
         const { latitude, longitude } = position.coords;
         this.userLocation = new LatLon(latitude, longitude);
         // this.lat = latitude;
@@ -44,6 +45,8 @@ export class Requests extends Component {
             // if (!this.userLocation)
             
             // should i save it in the Home component
+            // console.log('here')
+            // setTimeout for no result
             navigator.geolocation.getCurrentPosition(this.success, this.error);
         } else {
             // show messgae for no geolocation
