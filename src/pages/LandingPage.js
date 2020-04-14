@@ -31,7 +31,7 @@ export class Landing extends Component {
                     <p style={{ margin: '1rem 2.5rem', fontSize: '1rem', fontStyle: "italic" }}>Created by <br /> Mitchell Mark-George</p>
                     {/* style={{fontSize: '1.2rem'}} */}
                     {/* <p>Request help from people in your community in getting things from the outside world during this pandemic period.</p> */}
-                    <p>During this COVID-19 pandemic period... <br />Do you need help? <br /> Can you help? <br /> Get connected by Neighbor.</p>
+                    <p>During this COVID-19 pandemic period... <br />Do you need help? <br /> Can you help? <br /> Get connected with Neighbor.</p>
                     {/* <div>Created by Mitchell Mark-George</div> */}
                     <div>
                         <Button type="primary" onClick={this.goToLogin}>Login</Button> <Button type="primary" onClick={this.goToSignUp}>Sign Up</Button> <Button type="primary" onClick={this.goToTutorial}>Tutorial</Button>
