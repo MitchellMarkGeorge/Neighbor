@@ -38,7 +38,8 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         let updatedObject = {
             ...item, accepted_user_info: {
                 display_name: auth.currentUser.displayName,
-                uid: auth.currentUser.uid
+                uid: auth.currentUser.uid,
+                email: auth.currentUser.email
             }
         }
         // remove distance so it is not saved in database
@@ -64,7 +65,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
             await axios.post('https://hidden-headland-25369.herokuapp.com/email', {
                 updated_object: updatedObject,
-                accepting_user_email: auth.currentUser.email
+                // accepting_user_email: auth.currentUser.email
             });
         } catch (e) {
             console.log(e);

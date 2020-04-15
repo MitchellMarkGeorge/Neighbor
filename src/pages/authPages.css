@@ -17,10 +17,12 @@
 
 a {
     color: var(--primary-blue) !important;
+    cursor: pointer;
 }
 
 
 
 .neighbor-text {
     color: var(--primary-blue);
+    cursor: pointer;
 }

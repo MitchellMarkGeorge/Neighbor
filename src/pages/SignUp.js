@@ -58,7 +58,7 @@ export class SignUp extends Component {
                     onFinish={this.onFinish}
                     
                 >
-                    <h1 className="form-title">Sign Up to <span className="neighbor-text">Neighbor</span></h1>
+                    <h1 className="form-title">Sign Up to <span className="neighbor-text" onClick={() => {this.props.history.push('/')}}>Neighbor</span></h1>
 
                     {/* Aggreement */}
 

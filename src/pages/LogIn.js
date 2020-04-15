@@ -90,7 +90,7 @@ export class LogIn extends Component {
                         onFinish={this.onFinish}
                         onFinishFailed={this.onFinishFailed}
                     >
-                        <h1 className="form-title">Login to <span className="neighbor-text">Neighbor</span></h1>
+                        <h1 className="form-title">Login to <span className="neighbor-text" onClick={() => {this.props.history.push('/')}}>Neighbor</span></h1>
 
                         <Form.Item
                             name="email"

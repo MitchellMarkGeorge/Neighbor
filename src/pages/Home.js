@@ -132,7 +132,8 @@ export class Home extends Component {
                 long: first.lon,
                 user_info: {
                     display_name: this.state.user.displayName,
-                    uid: this.state.user.uid
+                    uid: this.state.user.uid,
+                    email: this.state.user.email
                 }
             }
             
@@ -349,7 +350,7 @@ export class Home extends Component {
                 <Layout className="layout">
                     <Header>
                         <div className="header-container">
-                            <h1>Neighbor <HomeFilled /> </h1>
+                            <h1 style={{cursor: 'pointer'}} onClick={() => {this.props.history.push('/')}}>Neighbor <HomeFilled /> </h1>
                             <ul className="header-items">
                                 <li ><Button type="danger" onClick={this.logOut}>Log Out</Button></li>
                                 {/* <li><Avatar icon={<UserOutlined/>}></Avatar></li> */}
