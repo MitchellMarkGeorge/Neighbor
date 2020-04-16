@@ -35,6 +35,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
     }
     const addToAccepted = async (item) => {
+        console.log()
         let updatedObject = {
             ...item, accepted_user_info: {
                 display_name: auth.currentUser.displayName,

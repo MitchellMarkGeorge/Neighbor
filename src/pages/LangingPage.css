@@ -54,6 +54,11 @@
     text-align: center;
 }
 
+.tutorial-container div video {
+    height: 50%;
+    width: 70%;
+}
+
 /* .tutorial-container p {
     font-size: initial;
 } */
@@ -73,6 +78,13 @@
 .inner-container div button {
     /* border-radius: 1rem; */
     margin-right: 0.5rem;
+}
+
+@media (max-width: 700px) {
+    .tutorial-container div video {
+        height: 70%;
+        width: 100%;
+    }
 }
 
 /* .landing-button {

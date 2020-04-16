@@ -14,6 +14,7 @@ import axios from 'axios';
 import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input } from 'antd';
 import { showNotification } from '../services/auth';
 import { Mobile, Desktop } from '../components/Responsive';
+import { Link } from 'react-router-dom';
 
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -37,6 +38,7 @@ export class Home extends Component {
     usernameRef = React.createRef();
     constructor(props) {
         super(props);
+        console.log(this.props.history) // should be avalible
         // console.log(auth.currentUser);
 
         this.state = {
@@ -401,7 +403,12 @@ export class Home extends Component {
                             </Menu>
                             <div style={{ textAlign: 'center' }}>
                                 <Button type="primary" onClick={this.showModal}>{this.state.collapsed ? '+' : 'Create New Request'}</Button>
+                                {/* <div><Link to="/tutorial">Need help? Go to tutorial.</Link></div> */}
+                                {/* should this be at the bottom */}
+                                {/* help button that turns into icon (question mark) */}
                             </div>
+
+                            {/* <Link to="/tutorial">Need help? Go to the tutorial</Link> */}
 
                         </Sider>
                         </Desktop>
