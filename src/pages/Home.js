@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import { useMediaQuery } from 'react-responsive'
 
 
-import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
 import { Accepted } from '../components/Accepted';
@@ -11,7 +11,7 @@ import { auth, database } from '../services/firebase'
 import axios from 'axios';
 
 // console.log(auth.currentUser)
-import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input } from 'antd';
+import { Layout, Avatar, Button, Menu, Modal, Form, Select, Input, Tooltip } from 'antd';
 import { showNotification } from '../services/auth';
 import { Mobile, Desktop } from '../components/Responsive';
 import { Link } from 'react-router-dom';
@@ -403,7 +403,11 @@ export class Home extends Component {
                             </Menu>
                             <div style={{ textAlign: 'center' }}>
                                 <Button type="primary" onClick={this.showModal}>{this.state.collapsed ? '+' : 'Create New Request'}</Button>
-                                {/* <div><Link to="/tutorial">Need help? Go to tutorial.</Link></div> */}
+                                <div>
+                                    <Tooltip title="Tutorial" placement="right"> 
+                                    {/* Help?? */}
+                                    <Link to="/tutorial"><QuestionCircleOutlined/></Link>
+                                    </Tooltip></div>
                                 {/* should this be at the bottom */}
                                 {/* help button that turns into icon (question mark) */}
                             </div>
