@@ -406,7 +406,11 @@ export class Home extends Component {
                                 <div>
                                     <Tooltip title="Tutorial" placement="right"> 
                                     {/* Help?? */}
-                                    <Link to="/tutorial"><QuestionCircleOutlined/></Link>
+                                    <Link to="/tutorial">
+                                        {!this.state.collapsed ? "Tutorial" : <QuestionCircleOutlined/>}
+                                        {/* Tutorial  */}
+                                        {/* <QuestionCircleOutlined/> */}
+                                        </Link>
                                     </Tooltip></div>
                                 {/* should this be at the bottom */}
                                 {/* help button that turns into icon (question mark) */}

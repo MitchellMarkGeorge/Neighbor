@@ -48,6 +48,8 @@ export class Requests extends Component {
             // console.log('here')
             // setTimeout for no result
             navigator.geolocation.getCurrentPosition(this.success, this.error);
+
+            // use a setTimeout
         } else {
             // show messgae for no geolocation
             this.loadRequests(); 

@@ -29,7 +29,7 @@ export function Tutorial() {
             <div style={{ margin: "1rem 0" }}><Button type="primary" onClick={goToApp}>Go to App</Button></div>
 
             <h1>An Example of how Neighbor works</h1>
-            <p className="story-text">Meet Jack and Jill. 
+            <p className="story-text">Meet Jack and Jill 
                 <br/>
                 <br/>
 
