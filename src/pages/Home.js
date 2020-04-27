@@ -5,8 +5,10 @@ import React, { Component } from 'react'
 import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
-import { Accepted } from '../components/Accepted';
+// import { Accepted } from '../components/Accepted';
+import { PersonalPages } from '../components/PersonalPages';
 import { auth, database } from '../services/firebase'
+import { pageConstants } from '../services/pageConstants';
 
 import axios from 'axios';
 
@@ -31,7 +33,15 @@ const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 //     const isMobile = useMediaQuery({ maxWidth: 700 })
 //     return isMobile ? children : null
 //   }
-  
+
+const Accepted = () => {
+    return <PersonalPages title="Accepted Requests" page={pageConstants.ACCEPTED_REQUESTS_PAGE} listPath="accepted_requests"/>
+}
+
+const MyRequests = () => {
+    return <PersonalPages title="My Requests" page={pageConstants.MY_REQUESTS_PAGE} listPath="user_requests"/>
+}
+
 export class Home extends Component {
 
     formRef = React.createRef();
@@ -74,8 +84,8 @@ export class Home extends Component {
         this.setState({ collapsed });
     };
 
-    onMenuClick = ({ item, key, keyPath, domEvent }) => {
-        // console.log(key);
+    onMenuClick = ({ key }) => {
+        console.log(key);
         this.setState({ currentMenuKey: key })
     }
 
@@ -104,9 +114,20 @@ export class Home extends Component {
     }
 
     addRequest = (requestObject) => {
-        let request_ref = database.ref('requests');
+        
+        const userID = this.state.user.uid
+        const newRequestKey = database.ref('requests').push().key;
 
-        request_ref.push(requestObject)
+        let updates = {};
+        updates[`/requests/${newRequestKey}`] = requestObject;
+        updates[`/user_requests/${userID}/${newRequestKey}`] = requestObject;
+
+
+        database.ref().update(updates);
+        // async await
+
+        // let request_ref = database.ref('requests');
+        // request_ref.push(requestObject)
     }
 
     
@@ -193,6 +214,29 @@ export class Home extends Component {
             // message.error(e.message)
             showNotification('error', e.message, null)
         }
+    }
+
+    getCurrentView = () => {
+        // let view;
+
+        console.log(this.state.currentMenuKey === '2')
+
+        if (this.state.currentMenuKey === '1') {
+            return <Requests page={pageConstants.REQUESTS_PAGE}/>
+        } else if (this.state.currentMenuKey === '2') {
+            
+            // view = <Accepted/>
+            // Accepted Requests
+            // could just use page constants to determine page details like listPath and title
+            // return <PersonalPages title="Accepted Requests" page={pageConstants.ACCEPTED_REQUESTS_PAGE} listPath="accepted_requests"/>
+            return <Accepted/>
+        } else if (this.state.currentMenuKey === '3') {
+            
+            return <MyRequests/>
+
+        }
+
+        // return view;
     }
 
 
@@ -388,9 +432,16 @@ export class Home extends Component {
                                     <SolutionOutlined />
                                     <span className="nav-text">Requests</span>
                                 </Menu.Item>
+
                                 <Menu.Item key="2">
                                     <InboxOutlined />
                                     <span className="nav-text">Accepted Request</span>
+                                </Menu.Item>
+
+                                <Menu.Item key="3">
+                                    <InboxOutlined /> 
+                                    {/* Think aboy this */}
+                                    <span className="nav-text">My Requests</span>
                                 </Menu.Item>
                                 {/* <Menu.Item key="3">
                                     <UploadOutlined />
@@ -423,7 +474,9 @@ export class Home extends Component {
                         <Content className="main-content">
                             {/* default is request page */}
 
-                            {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted />}
+                            {this.getCurrentView()}
+
+                            {/* {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted />} */}
                             
                         </Content>
                     </Layout>

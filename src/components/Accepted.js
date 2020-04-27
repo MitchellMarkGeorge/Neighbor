@@ -5,6 +5,8 @@ import './list.css'
 import { CardList } from './CardList';
 import { Spin } from 'antd';
 
+import { pageConstants } from '../services/pageConstants'
+
 // const userID = auth.currentUser.uid;
 
 export class Accepted extends Component {
@@ -15,7 +17,7 @@ export class Accepted extends Component {
         this.state = {
             loading: true,
             acceptedRequests: [],
-            
+
         }
 
         this.userID = auth.currentUser.uid;
@@ -43,23 +45,23 @@ export class Accepted extends Component {
     render() {
         return (
             <div className="base-div">
-                
+
 
                 <h1 className="page-title">Accepted Requests</h1>
 
-                <div className={this.state.loading ? 'spinning-loading': "list-body"}>
+                <div className={this.state.loading ? 'spinning-loading' : "list-body"}>
 
-                        
-                        <Spin spinning={this.state.loading} size="large">
-                        {this.state.acceptedRequests?.length 
-                        // || !this.state.loading 
-                            ? <CardList list={this.state.acceptedRequests} page="accepted" />
-                            : <div>{!this.state.loading? 'You have not accepted any requests yet.': ''}</div>}
-                        
-                        </Spin>
-                    </div>
 
-                
+                    <Spin spinning={this.state.loading} size="large">
+                        {this.state.acceptedRequests?.length
+                            // || !this.state.loading 
+                            ? <CardList list={this.state.acceptedRequests} page={pageConstants.ACCEPTED_REQUESTS_PAGE} />
+                            : <div>{!this.state.loading ? 'You have not accepted any requests yet.' : ''}</div>}
+
+                    </Spin>
+                </div>
+
+
             </div>
         )
     }

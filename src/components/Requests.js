@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import LatLon from 'geodesy/latlon-ellipsoidal-vincenty.js';
 import { showNotification } from '../services/auth';
 
-
+// import { pageConstants } from '../services/pageConstants'
 export class Requests extends Component {
     // recive current user as prop?
     userLocation;
@@ -16,7 +16,7 @@ export class Requests extends Component {
         this.state = {
             requests: [],
             loading: true,
-            
+
         }
     }
 
@@ -43,7 +43,7 @@ export class Requests extends Component {
         if (navigator.geolocation) {
             // if the user has geolocation capabilities in their browser
             // if (!this.userLocation)
-            
+
             // should i save it in the Home component
             // console.log('here')
             // setTimeout for no result
@@ -52,7 +52,7 @@ export class Requests extends Component {
             // use a setTimeout
         } else {
             // show messgae for no geolocation
-            this.loadRequests(); 
+            this.loadRequests();
 
         }
         // console.log('Request component mounting...')
@@ -87,9 +87,9 @@ export class Requests extends Component {
                     // itemLocation.distanceTo
                     newItem['distance'] = this.userLocation.distanceTo(itemLocation);
                     // requests.push(newItem)
-                } 
-                    requests.push(newItem)
-                
+                }
+                requests.push(newItem)
+
                 // requests.push({...item.val(), key: item.key})
             });
             // console.log(requests);
@@ -120,19 +120,19 @@ export class Requests extends Component {
                 <h1 className="page-title">Requests</h1>
 
                 {/* <Spin spinning={this.state.loading}> */}
-                    {/* // tip="Loading requests..."> */}
-                    <div className={this.state.loading ? 'spinning-loading': "list-body"}>
+                {/* // tip="Loading requests..."> */}
+                <div className={this.state.loading ? 'spinning-loading' : "list-body"}>
 
-                        
-                        <Spin spinning={this.state.loading} size="large">
-                        {this.state.requests?.length 
-                        // || !this.state.loading 
-                            ? <CardList list={this.state.requests} page="request" />
-                            : <div>{!this.state.loading? 'No requests to display.': ''}</div>}
+
+                    <Spin spinning={this.state.loading} size="large">
+                        {this.state.requests?.length
+                            // || !this.state.loading 
+                            ? <CardList list={this.state.requests} page={this.props.page} />
+                            : <div>{!this.state.loading ? 'Nothing to see here!' : ''}</div>}
                         {/* Use Empty component */}
-                        </Spin>
-                    </div>
-                {/* </Spin> */} 
+                    </Spin>
+                </div>
+                {/* </Spin> */}
 
 
                 {/* <Card title="Requests" headStyle={{fontSize: '1.5rem', color: 'var(--primary-blue)', position: 'sticky', zIndex: 2}} 
