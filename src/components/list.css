@@ -59,10 +59,12 @@
     border: none;
 } */
 
-.ant-card-body .accept-button {
+.ant-card-body .accept-button,  .comfirm-button{
     background-color: var(--primary-blue);
     border: none;
 }
+
+
 
 .spinning-loading {
     display: flex;
@@ -84,6 +86,7 @@
 
     .list-body, .spinning-loading {
         height: 60vh; 
+        /* make it bigger */
         /* height: auto; */
         /* max-height: 90%; */
          /*Used 60  */

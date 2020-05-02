@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Card, Button, Descriptions, Popconfirm } from 'antd'
+import React, { Component, useState } from 'react'
+import { Card, Button, Descriptions, Popconfirm, Popover, Input, Radio } from 'antd'
 import { auth, database } from '../services/firebase'
 // remove icons that are not used
 import { ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined } from '@ant-design/icons'
@@ -19,6 +19,9 @@ function CardExtra({ stateIndex, cardIndex, onItemMore, dismiss }) {
 
 // let _isMounted = false;
 function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
+
+    const [acceptChoice, setChoice] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     // let _isMounted = false;
     // sould use item argument in most functions
     const deleteRequest = async (item) => {
@@ -57,7 +60,11 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
             accepted_user_info: {
                 display_name: auth.currentUser.displayName,
                 uid: auth.currentUser.uid,
-                email: auth.currentUser.email
+                email: auth.currentUser.email,
+                // add contact info
+                // contact_info: phoneNumber || auth.currentUser.email 
+                contact_info: acceptChoice === 'phone' ? phoneNumber : auth.currentUser.email 
+                // can also use tenerary operator
             }
 
         }
@@ -74,13 +81,17 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         updates[`/requests/${item.key}`] = null;
 
         // if (updatedObject.user_info.uid === auth.currentUser.uid) {
-            updates[`/user_requests/${item.user_info.uid}/${item.key}`] = updatedObject; // should only create accepted_user_info key
+            // updates user request page
+        updates[`/user_requests/${item.user_info.uid}/${item.key}`] = updatedObject; // should only create accepted_user_info key
         // }
 
         updates[`/accepted_requests/${auth.currentUser.uid}/${newAcceptedRequestKey}`] = updatedObject
         try {
             await database.ref().update(updates);
             dismiss();
+            if (phoneNumber) {
+                setPhoneNumber('');
+            }
             // message.success('Thank you for accepting a new request! The user\'s contact information will be revealed to you and you can contact the creator of this request.', 7)
             showNotification('success', 'Thank you for accepting a new request!', "The user's contact information will be revealed to you and you can contact the creator of this request.", 5)
             // message.success('Thak you for accepting a new request! You can see it in the "Accepted Requests" tab. Plase contact the user of the request for more details.')
@@ -115,10 +126,44 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         }
     }
 
+    const radioChoiceChange = (e) => {
+        setChoice(e.target.value);
+    }
+
+    const phoneInputChange = (e) => {
+        setPhoneNumber( e.target.value.trim() );
+    }
+
+    const PopOverText = (item) => {
+
+        // option must be accepted and if phone is accepted, there must be a value in the input
+        const shouldBeDisabled = !acceptChoice || (acceptChoice === 'phone' && !phoneNumber);
+        // console.log(shouldBeDisabled)
+        return <div>
+            <p>Do you want to use: </p>
+
+            <Radio.Group onChange={radioChoiceChange} value={acceptChoice}> 
+            {/* should email be default */}
+                <Radio value='email'>Email</Radio>
+                <Radio value='phone'>Phone Number</Radio>
+            </Radio.Group>
+            {acceptChoice === 'phone' && <div style={{margin: '1rem 0'}}>
+                {/* should i only allow numbers???? */}
+            <Input size="small" type="tel" allowClear placeholder="Input phone number" onChange={phoneInputChange}/>
+            </div> }
+
+            <Button type="primary" className="comfirm-button"  disabled={shouldBeDisabled} onClick={() => { addToAccepted(item) }}>Confirm</Button> 
+            {/* add onClick */}
+
+            
+
+        </div>
+    }
+
     const getElement = (item) => {
         let Element;
         if (page === pageConstants.REQUESTS_PAGE || page === pageConstants.MY_REQUESTS_PAGE) {
-            // making sure where users cannot accept thruer own erwqueat
+            // making sure where users cannot accept thier own request
             if (auth.currentUser.uid === item.user_info.uid) {
 
                 Element = (
@@ -137,17 +182,20 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                 // } else { Element = <div>You can not accept your own request.</div>  } // might have a Retract Request button
             } else {
 
-                Element = <Button type="primary" className="accept-button" onClick={() => { addToAccepted(item) }}>Accept Request</Button>
+                Element = 
+                <Popover title="Contact Info" content={PopOverText(item)} trigger="click" placement="bottom">
+                    <Button type="primary" className="accept-button" 
+                    // onClick={() => { addToAccepted(item) }}
+                    >Accept Request</Button>
+                </Popover>
+                
 
             } // might have a Retract Request button
         } else if (page === pageConstants.ACCEPTED_REQUESTS_PAGE) {
             // Accepted or user
             Element = (<Button type="danger" onClick={() => { onConfirm(item) }}>Complete Request</Button>)
 
-        } else {
-            Element = null; // what should be on My Requests page 
-            // should they be able to delete their requests
-        }
+        } 
 
         return Element;
 
@@ -192,6 +240,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                     <h3>Requested By: {requested_by_name}</h3>
                     <h3>Requested Items:{getIconList(item.requested_items).map((icon, index) => (<span key={index} style={{ marginLeft: '0.5rem', color: 'var(--primary-blue)' }}>{icon}</span>))}</h3>
                     {page === pageConstants.REQUESTS_PAGE && item.distance && <h3>Distance: {Number(item.distance / 1000).toFixed(1)}km away from you</h3>}
+            {page === pageConstants.MY_REQUESTS_PAGE && item.accepted_user_info && <h3>Accepted By: {item.accepted_user_info.display_name}</h3>}
                     {/* Should the distance be displyed in accepted */}
                     {/* {<h3>Distance: {item.distance}m away from you</h3>} */}
                 </>
@@ -213,7 +262,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                         <Descriptions.Item label="Details">{item.details}</Descriptions.Item>
                         {(page === pageConstants.MY_REQUESTS_PAGE && item.accepted_user_info) && <>
                         <Descriptions.Item label="Accepted By">{item.accepted_user_info.display_name}</Descriptions.Item>
-                        <Descriptions.Item label="Accepting User Contact">{item.accepted_user_info.email}</Descriptions.Item>
+                        <Descriptions.Item label="Accepting User Contact">{item.accepted_user_info.contact_info}</Descriptions.Item>
                         </>}
                         {/* {page === 'request' && <div>For the sake of privacy, the user's contact information will not be shown.</div>} */}
                     </Descriptions>

@@ -117,7 +117,7 @@
     display: grid;
     grid-gap: 2rem;
     z-index: 1;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 
   .tab-bar div {
@@ -128,6 +128,10 @@
       /* Height 5rem */
       /* align-items: center;
     justify-content: center;  */
+  }
+
+  .tab-bar div a {
+      color: #fff !important; 
   }
 
   /* .tab-bar div p {

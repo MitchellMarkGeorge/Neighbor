@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import { useMediaQuery } from 'react-responsive'
 
 
-import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { HomeFilled, UserOutlined, ShoppingCartOutlined, MedicineBoxOutlined, ShoppingOutlined, InboxOutlined, SolutionOutlined, PlusCircleOutlined, QuestionCircleOutlined, IdcardOutlined } from '@ant-design/icons'
 import './Home.css';
 import { Requests } from '../components/Requests'
 // import { Accepted } from '../components/Accepted';
@@ -28,18 +28,18 @@ const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 //     const isDesktop = useMediaQuery({ minWidth: 701 })
 //     return isDesktop ? children : null
 //   }
-  
+
 //   const Mobile = ({ children }) => {
 //     const isMobile = useMediaQuery({ maxWidth: 700 })
 //     return isMobile ? children : null
 //   }
 
 const Accepted = () => {
-    return <PersonalPages title="Accepted Requests" page={pageConstants.ACCEPTED_REQUESTS_PAGE} listPath="accepted_requests"/>
+    return <PersonalPages title="Accepted Requests" page={pageConstants.ACCEPTED_REQUESTS_PAGE} listPath="accepted_requests" />
 }
 
 const MyRequests = () => {
-    return <PersonalPages title="My Requests" page={pageConstants.MY_REQUESTS_PAGE} listPath="user_requests"/>
+    return <PersonalPages title="My Requests" page={pageConstants.MY_REQUESTS_PAGE} listPath="user_requests" />
 }
 
 export class Home extends Component {
@@ -48,7 +48,7 @@ export class Home extends Component {
     usernameRef = React.createRef();
     constructor(props) {
         super(props);
-        console.log(this.props.history) // should be avalible
+        // console.log(this.props.history) // should be avalible
         // console.log(auth.currentUser);
 
         this.state = {
@@ -56,7 +56,7 @@ export class Home extends Component {
             user: auth.currentUser,
             currentMenuKey: '1',
             userName: auth.currentUser.displayName,
-            
+
             showCreateModal: false,
             // used if the user already has a username
             // if they dont, a modal will show
@@ -85,7 +85,7 @@ export class Home extends Component {
     };
 
     onMenuClick = ({ key }) => {
-        console.log(key);
+        // console.log(key);
         this.setState({ currentMenuKey: key })
     }
 
@@ -97,7 +97,7 @@ export class Home extends Component {
             // message.error('Unable to log out');
             showNotification('error', 'unable to Log Out', 'Try again later.')
         }
-        
+
         // dont need to do this as the component will be unmounted
         // this.setState({user: null});
     }
@@ -114,7 +114,7 @@ export class Home extends Component {
     }
 
     addRequest = (requestObject) => {
-        
+
         const userID = this.state.user.uid
         const newRequestKey = database.ref('requests').push().key;
 
@@ -130,25 +130,25 @@ export class Home extends Component {
         // request_ref.push(requestObject)
     }
 
-    
+
     handleOk = async (e) => {
         // console.log(e);
         this.setState({ creatButton: true })
         try {
             // reconsider order
             let values = await this.formRef.current.validateFields();
-            
+
             // chould just ask for it in Modal
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
             // currently restricted to canada
             // move to seperate function
-            let response  = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
+            let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
             //Best result - bind to ottawa
-            const [ first ] = geoData;
+            const [first] = geoData;
             let request_object = {
                 ...values,
                 lat: first.lat,
@@ -159,7 +159,7 @@ export class Home extends Component {
                     email: this.state.user.email
                 }
             }
-            
+
 
             this.addRequest(request_object);
             // console.log(request_object)
@@ -185,7 +185,7 @@ export class Home extends Component {
     };
 
     handleCancel = () => {
-        
+
         this.setState({
             showCreateModal: false,
         });
@@ -219,20 +219,20 @@ export class Home extends Component {
     getCurrentView = () => {
         // let view;
 
-        console.log(this.state.currentMenuKey === '2')
+        // console.log(this.state.currentMenuKey === '2')
 
         if (this.state.currentMenuKey === '1') {
-            return <Requests page={pageConstants.REQUESTS_PAGE}/>
+            return <Requests page={pageConstants.REQUESTS_PAGE} />
         } else if (this.state.currentMenuKey === '2') {
-            
+
             // view = <Accepted/>
             // Accepted Requests
             // could just use page constants to determine page details like listPath and title
             // return <PersonalPages title="Accepted Requests" page={pageConstants.ACCEPTED_REQUESTS_PAGE} listPath="accepted_requests"/>
-            return <Accepted/>
+            return <Accepted />
         } else if (this.state.currentMenuKey === '3') {
-            
-            return <MyRequests/>
+
+            return <MyRequests />
 
         }
 
@@ -268,7 +268,7 @@ export class Home extends Component {
                         }}
                     >
                         <h1 className="modal-title">Creat a new Request</h1>
-                        
+
 
                         {/* <Form.Item
                             name="requested_by"
@@ -363,7 +363,7 @@ export class Home extends Component {
                         </Form.Item>
 
 
-                        
+
                     </Form>
                 </Modal>
                 <Modal
@@ -396,7 +396,7 @@ export class Home extends Component {
                 <Layout className="layout">
                     <Header>
                         <div className="header-container">
-                            <h1 style={{cursor: 'pointer'}} onClick={() => {this.props.history.push('/')}}>Neighbor <HomeFilled /> </h1>
+                            <h1 style={{ cursor: 'pointer' }} onClick={() => { this.props.history.push('/') }}>Neighbor <HomeFilled /> </h1>
                             <ul className="header-items">
                                 <li ><Button type="danger" onClick={this.logOut}>Log Out</Button></li>
                                 {/* <li><Avatar icon={<UserOutlined/>}></Avatar></li> */}
@@ -406,70 +406,70 @@ export class Home extends Component {
                             </ul>
                         </div>
                     </Header>
-                    
+
                     <Layout>
                         <Desktop>
-                        <Sider className="sider"
-                            theme="light"
-                            collapsible
-                            // breakpoint="sm"
-                            // collapsedWidth="0"
-                            collapsed={this.state.collapsed}
-                            onCollapse={this.onCollapse}>
-                            {/* <div className="logo" /> */}
-                            <div className="user-detials">
-                                <Avatar icon={<UserOutlined />}></Avatar>
-                        {/* <Avatar>{this.state.userName.split('')[0]}</Avatar> */}
-                                {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.userName}</div>}
-                            </div>
-                            
-                            {/* Will probably move to tabs */}
-                            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}
-                                onClick={this.onMenuClick}
+                            <Sider className="sider"
+                                theme="light"
+                                collapsible
+                                // breakpoint="sm"
+                                // collapsedWidth="0"
+                                collapsed={this.state.collapsed}
+                                onCollapse={this.onCollapse}>
+                                {/* <div className="logo" /> */}
+                                <div className="user-detials">
+                                    <Avatar icon={<UserOutlined />}></Avatar>
+                                    {/* <Avatar>{this.state.userName.split('')[0]}</Avatar> */}
+                                    {!this.state.collapsed && <div style={{ margin: '0.5rem 0', fontSize: '1rem' }}>{this.state.userName}</div>}
+                                </div>
+
+                                {/* Will probably move to tabs */}
+                                <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}
+                                    onClick={this.onMenuClick}
                                 >
-                                {/* Think about icons */}
-                                <Menu.Item key="1">
-                                    <SolutionOutlined />
-                                    <span className="nav-text">Requests</span>
-                                </Menu.Item>
+                                    {/* Think about icons */}
+                                    <Menu.Item key="1">
+                                        <SolutionOutlined />
+                                        <span className="nav-text">Requests</span>
+                                    </Menu.Item>
 
-                                <Menu.Item key="2">
-                                    <InboxOutlined />
-                                    <span className="nav-text">Accepted Request</span>
-                                </Menu.Item>
+                                    <Menu.Item key="2">
+                                        <InboxOutlined />
+                                        <span className="nav-text">Accepted Request</span>
+                                    </Menu.Item>
 
-                                <Menu.Item key="3">
-                                    <InboxOutlined /> 
-                                    {/* Think aboy this */}
-                                    <span className="nav-text">My Requests</span>
-                                </Menu.Item>
-                                {/* <Menu.Item key="3">
+                                    <Menu.Item key="3">
+                                        <IdcardOutlined />
+                                        {/* Think aboy this */}
+                                        <span className="nav-text">My Requests</span>
+                                    </Menu.Item>
+                                    {/* <Menu.Item key="3">
                                     <UploadOutlined />
                                     <span className="nav-text">COVID 19 Info</span>
                                 </Menu.Item> */}
-                                {/* <Menu.Item key="4">
+                                    {/* <Menu.Item key="4">
                                 <UserOutlined />
                                 <span className="nav-text">nav 4</span>
                             </Menu.Item> */}
-                            </Menu>
-                            <div style={{ textAlign: 'center' }}>
-                                <Button type="primary" onClick={this.showModal}>{this.state.collapsed ? '+' : 'Create New Request'}</Button>
-                                <div>
-                                    <Tooltip title="Tutorial" placement="right"> 
-                                    {/* Help?? */}
-                                    <Link to="/tutorial">
-                                        {!this.state.collapsed ? "Tutorial" : <QuestionCircleOutlined/>}
-                                        {/* Tutorial  */}
-                                        {/* <QuestionCircleOutlined/> */}
-                                        </Link>
-                                    </Tooltip></div>
-                                {/* should this be at the bottom */}
-                                {/* help button that turns into icon (question mark) */}
-                            </div>
+                                </Menu>
+                                <div style={{ textAlign: 'center' }}>
+                                    <Button type="primary" onClick={this.showModal}>{this.state.collapsed ? '+' : 'Create New Request'}</Button>
+                                    <div>
+                                        <Tooltip title="Tutorial" placement="right">
+                                            {/* Help?? */}
+                                            <Link to="/tutorial">
+                                                {!this.state.collapsed ? "Tutorial" : <QuestionCircleOutlined />}
+                                                {/* Tutorial  */}
+                                                {/* <QuestionCircleOutlined/> */}
+                                            </Link>
+                                        </Tooltip></div>
+                                    {/* should this be at the bottom */}
+                                    {/* help button that turns into icon (question mark) */}
+                                </div>
 
-                            {/* <Link to="/tutorial">Need help? Go to the tutorial</Link> */}
+                                {/* <Link to="/tutorial">Need help? Go to the tutorial</Link> */}
 
-                        </Sider>
+                            </Sider>
                         </Desktop>
                         <Content className="main-content">
                             {/* default is request page */}
@@ -477,25 +477,38 @@ export class Home extends Component {
                             {this.getCurrentView()}
 
                             {/* {this.state.currentMenuKey === '1' ? <Requests /> : <Accepted />} */}
-                            
+
                         </Content>
                     </Layout>
                     <Mobile>
                         <Footer className="tab-bar">
-                            
-                            <div onClick={() => {this.setState({currentMenuKey: '1'})}}>
-                                <SolutionOutlined/> 
-                                
+
+                            <div onClick={() => { this.setState({ currentMenuKey: '1' }) }}>
+                                <SolutionOutlined />
+
                             </div>
 
-                            <div onClick={() => {this.setState({showCreateModal: true})}}>
-                                <PlusCircleOutlined/>
-                                
+                            {/* Formating */}
+                            <div>
+                                <Link to="/tutorial">
+                                    <QuestionCircleOutlined />
+
+                                </Link>
                             </div>
 
-                            <div onClick={() => {this.setState({currentMenuKey: '2'})}}>
-                                <InboxOutlined/>
-                                
+                            <div onClick={() => { this.setState({ showCreateModal: true }) }}>
+                                <PlusCircleOutlined />
+
+                            </div>
+
+                            <div onClick={() => { this.setState({ currentMenuKey: '2' }) }}>
+                                <InboxOutlined />
+
+                            </div>
+                            {/* need to figure out positoning */}
+                            <div onClick={() => { this.setState({ currentMenuKey: '3' }) }}>
+                                <IdcardOutlined />
+
                             </div>
                         </Footer>
                     </Mobile>
