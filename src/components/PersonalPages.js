@@ -21,7 +21,7 @@ export class PersonalPages extends Component {
         const { listPath } = this.props;
         this.userID = auth.currentUser.uid;
         this.list_path = `${listPath}/${this.userID}`;
-        console.log(this.list_path)
+        // console.log(this.list_path)
         // this
     }
 
@@ -37,7 +37,7 @@ export class PersonalPages extends Component {
             snapshot.forEach((item) => {
                 list.push({ ...item.val(), key: item.key })
             });
-            console.log(list)
+            // console.log(list)
             // console.log(acceptedRequests);
             this.setState({ list, loading: false })
         })
