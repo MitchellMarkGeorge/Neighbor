@@ -15,7 +15,8 @@
 
 
 .more-text {
-    color: var(--primary-blue)
+    color: var(--primary-blue);
+    cursor: pointer;
 }
 
 .page-title {

@@ -146,7 +146,7 @@ export class Home extends Component {
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
             // currently restricted to canada
             // move to seperate function
-            let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca&addressdetails=1`);
+            let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=CA&addressdetails=1`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
             //Best result - bind to ottawa
@@ -156,7 +156,7 @@ export class Home extends Component {
                 ...values,
                 lat: first.lat,
                 long: first.lon,
-                neighborhood: `${first.address.neighbourhood}, ${first.address.city}`,
+                neighborhood: `${first.address.neighbourhood}, ${first.address.city || first.address.town || first.address.village}`,
                 user_info: {
                     display_name: this.state.user.displayName,
                     uid: this.state.user.uid,
@@ -298,7 +298,7 @@ export class Home extends Component {
                                 },
                             ]}
                         >
-                            <Input placeholder="Where you want the delivery to be dropped off" />
+                            <Input placeholder="Street Number, Street Name, Neighborhood, City" />
                         </Form.Item>
 
                         <Form.Item

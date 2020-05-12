@@ -168,6 +168,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
 
                 Element = (
                     <Popconfirm
+                        
                         placement="bottom"
                         title="Are you sure you want to delete this request?"
                         okText="Yes"
@@ -333,11 +334,12 @@ export class CardList extends Component {
             <div style={{ height: '100%' }}>
                 {this.props.list.map((item, index) => (
 
-                    <Card hoverable title={item.neighborhood} style={{ marginBottom: '1rem' }}
+                    <Card title={item.neighborhood} style={{ marginBottom: '1rem' }}
                         headStyle={{ color: 'var(--primary-blue)' }} // bold Title
                         extra={<CardExtra stateIndex={this.state.currentRequestIndex} cardIndex={index} onItemMore={() => { this.onItemMore(index) }} dismiss={this.dismiss} />}
                         key={index}
-                        onClick={() => { this.onClick(index)}}>
+                        // onClick={() => { this.onClick(index)}}
+                        >
                         <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss} />
 
 
