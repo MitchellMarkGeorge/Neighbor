@@ -6,6 +6,10 @@ import { Spin } from 'antd';
 import LatLon from 'geodesy/latlon-ellipsoidal-vincenty.js';
 import { showNotification } from '../services/auth';
 
+import { Select } from 'antd';
+
+const { Option } = Select;
+
 // import { pageConstants } from '../services/pageConstants'
 export class Requests extends Component {
     // recive current user as prop?
@@ -16,6 +20,7 @@ export class Requests extends Component {
         this.state = {
             requests: [],
             loading: true,
+            filterChoice: 'all'
 
         }
     }
@@ -106,7 +111,14 @@ export class Requests extends Component {
         // removes all callbacks
         database.ref('requests').off();
     }
+
+    onChange = (filterChoice) => {
+        this.setState({ filterChoice })
+        // console.log(filterChoice);
+    }
     render() {
+
+        let request_array = this.state.filterChoice === 'all'? this.state.requests : this.state.requests.filter(item => item.requested_items.includes(this.state.filterChoice))
         return (
             <div className="base-div" >
                 {/* Hello from Requests
@@ -117,7 +129,15 @@ export class Requests extends Component {
                     ))}
                 </ul> */}
 
-                <h1 className="page-title">Requests</h1>
+                <h1 className="page-title">Requests  <Select defaultValue={this.state.filterChoice}
+                //  style={{float: 'right', width: '15%'}}  
+                className="select-filter"
+                 onChange={this.onChange}>
+      <Option value="all">All</Option>
+      <Option value="food">Food</Option>
+      <Option value="medicine">Medicine</Option>
+      <Option value="other">Other</Option>
+    </Select></h1>
 
                 {/* <Spin spinning={this.state.loading}> */}
                 {/* // tip="Loading requests..."> */}
@@ -125,9 +145,10 @@ export class Requests extends Component {
 
 
                     <Spin spinning={this.state.loading} size="large">
-                        {this.state.requests?.length
+                        {request_array?.length
                             // || !this.state.loading 
-                            ? <CardList list={this.state.requests} page={this.props.page} />
+                            // ? <CardList list={this.state.requests} page={this.props.page} />
+                            ? <CardList list={request_array} page={this.props.page} />
                             : <div>{!this.state.loading ? 'Nothing to see here!' : ''}</div>}
                         {/* Use Empty component */}
                     </Spin>

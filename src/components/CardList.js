@@ -255,9 +255,19 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
                         {/* Should this still be shown on My Request Page? */}
                         <Descriptions.Item label="Requested By">{requested_by_name}</Descriptions.Item>
                         {/* Link to google maps{item.delivery_location} */}
-                        {<Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>}
-                        {page === pageConstants.ACCEPTED_REQUESTS_PAGE && <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>}
-                        <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
+                        {/* {<Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>} */}
+                        {/* {(page === pageConstants.ACCEPTED_REQUESTS_PAGE || page === pageConstants.MY_REQUESTS_PAGE) && <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>}
+                        {(page === pageConstants.ACCEPTED_REQUESTS_PAGE || page === pageConstants.MY_REQUESTS_PAGE) && <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>} */}
+
+                        {(page === pageConstants.ACCEPTED_REQUESTS_PAGE || page === pageConstants.MY_REQUESTS_PAGE) && <>
+                            <Descriptions.Item label="Delivery Location"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.delivery_location)}`} target="_blank" rel="noopener noreferrer">{item.delivery_location}</a></Descriptions.Item>
+                            <Descriptions.Item label="Contact Info">{item.contact_info}</Descriptions.Item>
+                            
+
+                         </>}
+
+                         <Descriptions.Item label="Delivery Instructions">{item.delivery_instructions}</Descriptions.Item>
+
                         <Descriptions.Item label="Requested Items"><p style={{ textTransform: 'capitalize', margin: 0 }}>{item.requested_items.join(', ')}</p></Descriptions.Item>
                         <Descriptions.Item label="Details">{item.details}</Descriptions.Item>
                         {(page === pageConstants.MY_REQUESTS_PAGE && item.accepted_user_info) && <>
@@ -303,6 +313,17 @@ export class CardList extends Component {
         }
     }
 
+    onClick = (index) => {
+        // if open, dismiss
+        // if clased, open
+
+        if (index === this.state.currentRequestIndex) {
+            this.dismiss();
+        } else {
+            this.onItemMore(index);
+        }
+    }
+
 
     render() {
         return (
@@ -312,10 +333,11 @@ export class CardList extends Component {
             <div style={{ height: '100%' }}>
                 {this.props.list.map((item, index) => (
 
-                    <Card hoverable title={item.delivery_location} style={{ marginBottom: '1rem' }}
+                    <Card hoverable title={item.neighborhood} style={{ marginBottom: '1rem' }}
                         headStyle={{ color: 'var(--primary-blue)' }} // bold Title
                         extra={<CardExtra stateIndex={this.state.currentRequestIndex} cardIndex={index} onItemMore={() => { this.onItemMore(index) }} dismiss={this.dismiss} />}
-                        key={index}>
+                        key={index}
+                        onClick={() => { this.onClick(index)}}>
                         <CardBody item={item} cardIndex={index} stateIndex={this.state.currentRequestIndex} page={this.props.page} dismiss={this.dismiss} />
 
 

@@ -24,6 +24,8 @@ const { Option } = Select;
 const { TextArea } = Input;
 const LOCATION_IQ_TOKEN = '2046bb1db5b31b'
 
+console.log(window.location.hostname)
+
 // const Desktop = ({ children }) => { // reconsider this
 //     const isDesktop = useMediaQuery({ minWidth: 701 })
 //     return isDesktop ? children : null
@@ -144,15 +146,17 @@ export class Home extends Component {
             // let resonse  = axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=SEARCH_STRING&format=json`)
             // currently restricted to canada
             // move to seperate function
-            let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca`);
+            let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${LOCATION_IQ_TOKEN}&q=${values.delivery_location}&format=json&countrycodes=ca&addressdetails=1`);
             // WILL FAIL IF LOCATION ISNT GOOD
             let geoData = await response.data;
             //Best result - bind to ottawa
             const [first] = geoData;
+            console.log(first);
             let request_object = {
                 ...values,
                 lat: first.lat,
                 long: first.lon,
+                neighborhood: `${first.address.neighbourhood}, ${first.address.city}`,
                 user_info: {
                     display_name: this.state.user.displayName,
                     uid: this.state.user.uid,
@@ -267,7 +271,7 @@ export class Home extends Component {
                             requested_by: this.state.user.displayName
                         }}
                     >
-                        <h1 className="modal-title">Creat a new Request</h1>
+                        <h1 className="modal-title">Create a new Request</h1>
 
 
                         {/* <Form.Item
