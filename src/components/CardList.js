@@ -28,6 +28,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         dismiss(); // delete from user_requests
         // let itemRef = database.ref(`requests/${item.key}`);
 
+        
 
         // try {
         //     await itemRef.remove();
