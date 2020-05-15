@@ -213,7 +213,7 @@ function CardBody({ item, stateIndex, cardIndex, page, dismiss }) {
         // should justv return it
         let iconList = list.map((item) => {
             let icon; // could just return it outright
-            if (item === 'food') {
+            if (item === 'groceries') {
                 icon = <ShoppingCartOutlined />
             } else if (item === "medicine") {
                 icon = <MedicineBoxOutlined />

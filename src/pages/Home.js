@@ -140,6 +140,8 @@ export class Home extends Component {
             // reconsider order
             let values = await this.formRef.current.validateFields();
 
+            // console.log(values);
+
             // chould just ask for it in Modal
             // can also incude timestap for ordering
             // let request_object = {...values, requested_by: this.state.user.displayName}
@@ -156,7 +158,8 @@ export class Home extends Component {
                 ...values,
                 lat: first.lat,
                 long: first.lon,
-                neighborhood: `${first.address.neighbourhood}, ${first.address.city || first.address.town || first.address.village}`,
+                // figure out best way to format this string (only show city if first info is unavalible)
+                neighborhood: `${first.address.neighbourhood  || first.address.hamlet || first.address.city_district }, ${first.address.city || first.address.town || first.address.village}`,
                 user_info: {
                     display_name: this.state.user.displayName,
                     uid: this.state.user.uid,
@@ -344,9 +347,9 @@ export class Home extends Component {
                             >
                                 {/* Think about icons */}
                                 {/* Should i make the value uppercase */}
-                                <Option value="food" label="Food"><ShoppingCartOutlined /> Food</Option>
-                                <Option value="medicine" label="Food"><MedicineBoxOutlined /> Medicine</Option>
-                                <Option value="other" label="Other"><ShoppingOutlined /> Other</Option>
+                                <Option value="groceries"><ShoppingCartOutlined /> Groceries</Option>
+                                <Option value="medicine"><MedicineBoxOutlined /> Medicine</Option>
+                                <Option value="other"><ShoppingOutlined /> Other</Option>
 
                             </Select>
                         </Form.Item>

@@ -129,15 +129,15 @@ export class Requests extends Component {
                     ))}
                 </ul> */}
 
-                <h1 className="page-title">Requests  <Select defaultValue={this.state.filterChoice}
+                <h1 className="page-title">Requests <Select defaultValue={this.state.filterChoice}
                 //  style={{float: 'right', width: '15%'}}  
                 className="select-filter"
                  onChange={this.onChange}>
-      <Option value="all">All</Option>
-      <Option value="food">Food</Option>
-      <Option value="medicine">Medicine</Option>
-      <Option value="other">Other</Option>
-    </Select></h1>
+                    <Option value="all">All</Option>
+                    <Option value="groceries">Groceries</Option>
+                    <Option value="medicine">Medicine</Option>
+                    <Option value="other">Other</Option>
+                </Select></h1>
 
                 {/* <Spin spinning={this.state.loading}> */}
                 {/* // tip="Loading requests..."> */}
